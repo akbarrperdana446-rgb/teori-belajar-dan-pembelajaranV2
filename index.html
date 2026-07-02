@@ -84,7 +84,6 @@
             display: flex;
         }
         
-        /* Memberikan jarak antara huruf A. B. C. dengan teks jawabannya */
         .option-label {
             margin-right: 10px;
             font-weight: 900;
@@ -103,7 +102,7 @@
         }
         
         .option.selected .option-label {
-            color: white; /* Ubah warna huruf abjad saat dipilih */
+            color: white;
         }
 
         .option.correct {
@@ -203,8 +202,7 @@
         
         <div class="question-text" id="question">Memuat soal...</div>
         
-        <div class="options-container" id="options">
-            </div>
+        <div class="options-container" id="options"></div>
 
         <div class="controls">
             <button class="btn" id="btn-prev" onclick="prevQuestion()">🌸 Sebelumnya</button>
@@ -223,148 +221,1548 @@
 </div>
 
 <script>
-    // Data Lengkap 140 Soal (Urutan Asli)
+    // Data Lengkap 140 Soal (Susunan Sangat Rapi dengan Kunci Abjad)
     const originalQuestions = [
-        { question: "Menurut Gagné, perubahan perilaku hasil belajar bersifat relatif permanen karena.", options: ["dipengaruhi oleh faktor keturunan", "dapat bertahan lama selama individu mengulanginya terus-menerus sampai individu tersebut mengingatnya", "terjadi melalui pengalaman masa lalu ataupun dari pembelajaran yang bertujuan atau direncanakan", "tidak memerlukan proses penguatan (reinforcement)"], correctAnswer: 2 },
-        { question: "Menurut Meyer, pengertian belajar adalah adanya perubahan pengetahuan dan perilaku individu yang bersifat", options: ["relatif permanen", "permanen", "selamanya", "singkat"], correctAnswer: 0 },
-        { question: "Gagné, seorang ahli Teknologi Pendidikan, menyampaikan bahwa belajar merupakan proses alami yang mengubah", options: ["pengetahuan, keterampilan, dan sikap", "pengetahuan, cara hidup, cara berpikir", "keterampilan, cara berpikir, dan cara hidup", "sikap dan pengetahuan"], correctAnswer: 0 },
-        { question: "Menurut Ambrose, belajar menunjukkan ciri-ciri berupa", options: ["proses perubahan - pengalaman belajar", "produk - proses - output", "perubahan - produk - output", "output - kompetensi - proses"], correctAnswer: 0 },
-        { question: "Gagné berpendapat bahwa salah satu ciri seseorang telah belajar adalah", options: ["menunjukkan kecerdasan", "memberikan respon", "memiliki kemampuan baru", "membantu orang lain untuk belajar"], correctAnswer: 2 },
-        { question: "Menurut Ambrose dkk. (2010), belajar ditandai oleh proses perubahan ....", options: ["kebiasaan siswa dalam menyelesaikan tugas harian", "struktur pengetahuan yang dimiliki individu", "gaya belajar yang diwariskan sejak lahir", "keterampilan psikomotor tanpa melibatkan aspek kognitif"], correctAnswer: 1 },
-        { question: "Contoh paling tepat dari belajar asosiasi verbal adalah", options: ["menghafalkan urutan warna pada pelangi mejikuhibiniu", "memahami konsep gaya gravitasi melalui eksperimen", "menyusun laporan hasil observasi dengan metode ilmiah", "menganalisis sebab-akibat dalam kasus konflik sosial"], correctAnswer: 0 },
-        { question: "Manakah kegiatan belajar berikut yang menunjukkan belajar sebagai proses asosiasi verbal?", options: ["Pak Rudi mengetuk papan tulis ketika siswanya bersuara ramai selama belajar", "Bu Kristi memberikan lambang 3 bintang di buku kerja siswa terbaik", "Pak Randi meminta siswa memperbaiki jawaban soal yang salah", "Bu Tina meminta siswa menjawab nama hewan ketika ditunjukkan gambar harimau"], correctAnswer: 3 },
-        { question: "Manakah kegiatan belajar berikut yang menunjukkan belajar sebagai proses membedakan (discrimination)?", options: ["Primus mampu mengidentifikasi berbagai bentuk bangun geometri", "Pak Randi meminta siswa memperbaiki jawaban soal yang salah", "Bu Tina meminta siswa menjawab nama hewan ketika ditunjukkan foto harimau", "Alfina mampu membedakan bilangan prima dengan bilangan ganjil"], correctAnswer: 3 },
-        { question: "Mahasiswa mempraktikkan langkah-langkah penggunaan aplikasi e-learning Moodle untuk membuat kuis interaktif. Aktivitas tersebut termasuk dalam kategori pengetahuan", options: ["faktual", "konseptual", "prosedural", "metakognitif"], correctAnswer: 2 },
-        { question: "Perhatikan rumusan capaian pembelajaran berikut:\n\"Diberikan kasus pencemaran lingkungan di lokasi tempat pembuangan sampah, peserta didik mampu memberikan rekomendasi cara pengelolaan sampah rumah tangga.\"\nRumusan tersebut termasuk jenis pengetahuan kognitif....", options: ["evaluasi", "sintesis", "aplikasi", "pemahaman"], correctAnswer: 0 },
-        { question: "Perhatikan rumusan capaian pembelajaran berikut:\n\"Setelah mempelajari materi tentang cuaca, siswa mampu menjelaskan proses terjadinya hujan.\"\nRumusan tersebut termasuk jenis pengetahuan kognitif ....", options: ["evaluasi", "sintesis", "aplikasi", "pemahaman"], correctAnswer: 3 },
-        { question: "Berikut adalah contoh motivasi ekstrinsik peserta didik dalam belajar, kecuali ....", options: ["Anstri belajar Kimia karena orang tuanya ingin Anstri menjadi apoteker", "Rudy kecewa karena orang tuanya tidak memberikan hadiah ketika ia naik kelas", "Ihsan menentukan target ia harus mendapatkan skor 100 dalam pelajaran Agama", "Ronald mengincar hadiah sepeda bila ia mendapatkan ranking 1"], correctAnswer: 2 },
-        { question: "Menurut teori motivasi belajar, motivasi intrinsik dapat memengaruhi proses pembelajaran karena", options: ["membuat mahasiswa fokus pada hasil akhir, bukan proses", "menumbuhkan semangat belajar yang berkelanjutan dan mandiri", "mendorong mahasiswa untuk mengandalkan hadiah eksternal", "mengurangi keinginan mahasiswa untuk mengeksplorasi pengetahuan"], correctAnswer: 1 },
-        { question: "Berikut adalah contoh motivasi ekstrinsik peserta didik dalam belajar", options: ["Amy senang belajar Fisika karena ingin kuliah di Teknik Elektro", "Gafur kecewa terhadap orang tuanya yang tidak memberikan hadiah ketika ia naik kelas", "Lia menentukan target mendapat skor 100 dalam Matematika", "Anton mampu menyeimbangkan waktu belajar dengan bermain"], correctAnswer: 1 },
-        { question: "Berikut adalah faktor eksternal yang mempengaruhi belajar peserta didik, kecuali ....", options: ["lingkungan tempat tinggal peserta didik", "kondisi keluarga peserta didik", "status sosial ekonomi peserta didik", "minat peserta didik untuk belajar"], correctAnswer: 3 },
-        { question: "Seorang mahasiswa merasa sulit fokus belajar karena lingkungan rumahnya bising dan kurang kondusif. Masalah tersebut berkaitan dengan", options: ["faktor internal berupa kesiapan belajar", "faktor eksternal berupa tingkat kecerdasan teman sebaya", "faktor internal berupa gaya belajar individu", "faktor eksternal berupa kondisi lingkungan belajar"], correctAnswer: 3 },
-        { question: "Salah satu faktor internal yang mempengaruhi belajar peserta didik adalah ....", options: ["status sosial ekonomi peserta didik", "kondisi keluarga peserta didik", "minat peserta didik untuk belajar", "lingkungan tempat tinggal peserta didik"], correctAnswer: 2 },
-        { question: "Pembelajaran adalah pengaturan dan penciptaan kondisi-kondisi eksternal sedemikian rupa sehingga menunjang proses belajar peserta didik. Pengertian ini dikemukakan oleh", options: ["Kaufman", "Smaldino", "Gagné", "Winkel"], correctAnswer: 2 },
-        { question: "Menurut Gagné (1977), salah satu faktor eksternal penting yang harus disiapkan dalam pembelajaran adalah", options: ["motivasi peserta didik", "motivasi pendidik", "kegiatan belajar peserta didik", "kesehatan peserta didik"], correctAnswer: 2 },
-        { question: "Contoh penerapan konsep pembelajaran menurut Smaldino adalah", options: ["Mahasiswa mempelajari teori tanpa praktik dan tanpa media.", "Dosen menyampaikan materi hanya melalui ceramah sepanjang perkuliahan.", "Dosen merancang aktivitas diskusi berbasis video interaktif pada LMS.", "Mahasiswa belajar sendiri tanpa adanya tujuan pembelajaran."], correctAnswer: 2 },
-        { question: "Dari kegiatan berikut ini, manakah yang bukan merupakan kegiatan pembelajaran?", options: ["Pendidik mengajar peserta didik.", "Pendidik membagikan buku paket kepada peserta didik.", "Pendidik membimbing peserta didik melakukan observasi lapangan.", "Pendidik menyajikan materi tentang proses terjadinya hujan."], correctAnswer: 1 },
-        { question: "Pernyataan yang tepat mengenai hubungan antara pengajaran dan pembelajaran adalah ....", options: ["Pengajaran dan pembelajaran adalah dua proses yang sama.", "Pembelajaran dapat terjadi tanpa pengajaran, tetapi pengajaran tidak selalu menghasilkan pembelajaran.", "Pengajaran selalu menjamin keberhasilan pembelajaran.", "Pembelajaran hanya dapat dilakukan melalui pengajaran langsung."], correctAnswer: 1 },
-        { question: "Dari kegiatan berikut ini, manakah yang paling tepat menunjukkan kegiatan pembelajaran?", options: ["Peserta didik hadir mendengarkan penjelasan pendidik di kelas.", "Pendidik membagikan buku paket kepada peserta didik.", "Peserta didik praktik mengamati sel hewan dan tumbuhan dalam kelompok.", "Pendidik menyajikan materi tentang proses terjadinya fotosintesis kepada peserta didik."], correctAnswer: 2 },
-        { question: "Adit adalah seorang lulusan SMK Jurusan Akuntansi. Ia bekerja di sebuah toko online dan selalu berkomunikasi dengan mitra kerjanya di seluruh dunia melalui internet. Kecakapan yang dimiliki Adit termasuk dalam kecakapan", options: ["Kreativitas dan inovasi", "Berkomunikasi dan berkolaborasi", "Memecahkan masalah", "Berpikir kritis"], correctAnswer: 1 },
-        { question: "Dosen memberikan dua pilihan strategi pembelajaran untuk materi Kewargaan Digital: \n1. Diskusi berbasis kasus nyata pelanggaran etika digital.\n2. Ceramah tradisional berbasis teori.\nJika tujuan pembelajaran adalah meningkatkan kesadaran dan keterampilan etis mahasiswa di ruang digital, keputusan terbaik adalah", options: ["Memilih diskusi berbasis kasus karena mendorong partisipasi aktif dan refleksi kritis.", "Memilih ceramah tradisional karena dosen dapat mengontrol isi materi.", "Menggabungkan keduanya tanpa mempertimbangkan keterbatasan waktu perkuliahan.", "Menggunakan metode ceramah karena dianggap lebih cepat menyampaikan teori."], correctAnswer: 0 },
-        { question: "Adriana senang belajar di perpustakaan sekolah karena ruangannya nyaman dan koleksi bukunya lengkap. Namun, ia terganggu oleh suara siswa lain. Bersama kelompoknya, Adriana membuat alat pendeteksi suara bising untuk diletakkan di perpustakaan. Kecakapan yang dimiliki kelompok Adriana termasuk dalam kecakapan", options: ["Berkomunikasi dan berkolaborasi", "Kewargaan digital", "Berpikir kritis", "Kreativitas dan inovasi"], correctAnswer: 3 },
-        { question: "Seorang dosen memprogram LMS untuk memberikan umpan balik otomatis berupa \"Selamat! Jawaban Anda benar\" setiap kali mahasiswa berhasil menjawab soal latihan. Berdasarkan teori behavioristik, praktik ini bertujuan untuk", options: ["Membantu mahasiswa mengembangkan metakognisi.", "Memperkuat respons yang benar melalui penguatan positif.", "Mendorong mahasiswa membangun makna personal.", "Memberikan kebebasan mahasiswa mengeksplorasi konsep secara mandiri."], correctAnswer: 1 },
-        { question: "Berikut ini yang merupakan penjelasan belajar menurut teori behavioristik adalah ....", options: ["Proses interaksional untuk memperoleh pemahaman baru.", "Proses belajar dari pengalaman langsung sebagai akibat tindakan seseorang.", "Perpindahan dari pengaruh lingkungan ke arah faktor manusia.", "Perubahan tingkah laku sebagai hasil interaksi antara stimulus dan respons."], correctAnswer: 3 },
-        { question: "Berikut ini yang merupakan penjelasan belajar menurut teori behavioristik adalah ....", options: ["Proses interaksional untuk memperoleh pemahaman baru.", "Perubahan tingkah laku sebagai hasil interaksi antara stimulus dan respons, menekankan hasil belajar (outcome) dan kurang memperhatikan proses.", "Belajar dari pengalaman langsung (enactive learning).", "Perpindahan dari pengaruh lingkungan ke arah faktor manusia."], correctAnswer: 1 },
-        { question: "Di sebuah kelas, seorang pendidik memberikan pujian kepada peserta didik atas hasil karya atau keberaniannya mengemukakan pendapat. Jika pujian tidak diberikan, peserta didik tidak tertarik lagi untuk berkarya. Contoh tersebut merupakan teori behavioristik Skinner yaitu", options: ["Negative reinforcement", "Positive reinforcement", "Law of effect", "Operant conditioning"], correctAnswer: 1 },
-        { question: "John Broadus Watson merupakan tokoh teori behavioristik. Pandangannya berfokus pada pentingnya ....", options: ["kesehatan fisik individu sejak dalam kandungan", "motivasi intrinsik mahasiswa", "faktor lingkungan dalam proses belajar individu", "perubahan mental mahasiswa"], correctAnswer: 2 },
-        { question: "Menurut teori belajar Guthrie, hubungan antara stimulus dan respons terbentuk karena ...", options: ["penguatan yang diberikan terus-menerus", "kedekatan waktu antara stimulus dan respons (contiguity)", "hukuman setelah respons salah", "motivasi internal individu"], correctAnswer: 1 },
-        { question: "Benny berlatih pukulan smash bulutangkis secara rutin sehingga keterampilannya semakin baik. Kegiatan tersebut merupakan penerapan teori Thorndike yaitu hukum", options: ["Trial and error", "Law of effect", "Law of readiness", "Law of exercise"], correctAnswer: 3 },
-        { question: "Dalam pembelajaran seni tari, peserta didik yang siap mempelajari gerakan baru akan merasa puas, sedangkan yang belum siap akan merasa terpaksa. Hal ini sesuai dengan hukum belajar Thorndike, yaitu", options: ["Trial and error", "Law of effect", "Law of readiness", "Law of exercise"], correctAnswer: 2 },
-        { question: "Mengapa hukum kesiapan penting dalam proses belajar mengajar?", options: ["Karena memastikan adanya motivasi dan kesiapan akan membuat proses belajar lebih optimal.", "Karena dapat menggantikan peran stimulus dan respons.", "Karena menjadi satu-satunya faktor penentu hasil belajar.", "Karena lebih menekankan penghafalan materi."], correctAnswer: 0 },
-        { question: "Jika seorang siswa memiliki kebiasaan berbicara di kelas, penerapan metode kelelahan menurut Guthrie adalah", options: ["memberikan penghargaan ketika siswa berhasil diam", "memberikan hukuman agar siswa tidak mengulanginya", "mengganti kebiasaan berbicara dengan aktivitas mencatat", "meminta siswa berbicara terus-menerus hingga bosan dan berhenti"], correctAnswer: 3 },
-        { question: "Metode yang cocok digunakan untuk mengatasi peserta didik yang berbicara terus-menerus agar menjadi diam menurut Guthrie adalah metode", options: ["respons bertentangan", "kelelahan", "ambang", "rewards"], correctAnswer: 1 },
-        { question: "Pak Irwan menyuruh Chiko yang suka berlari-lari di kelas untuk berlari di halaman sekolah sebelum pembelajaran dimulai. Tindakan tersebut merupakan penerapan teori Guthrie dengan metode", options: ["respons bertentangan", "kelelahan", "ambang", "hukuman"], correctAnswer: 1 },
-        { question: "Dalam praktik pembelajaran, ciri penerapan behavioristik tampak ketika dosen", options: ["mendorong mahasiswa menemukan konsep melalui diskusi reflektif", "meminta mahasiswa melakukan refleksi diri", "memberikan pujian setiap kali mahasiswa berhasil menjawab benar", "menekankan konstruksi makna pribadi"], correctAnswer: 2 },
-        { question: "Berikut ini ciri-ciri prinsip teori belajar behavioristik, kecuali ....", options: ["Menekankan adanya asosiasi (connections) antara stimulus dan respons", "Penciptaan situasi belajar yang menyenangkan", "Pembelajaran dilakukan secara bertahap dari yang sederhana ke yang kompleks", "Belajar dari pengalaman langsung (enactive learning)"], correctAnswer: 3 },
-        { question: "Berikut ini yang merupakan penerapan prinsip teori belajar behavioristik adalah ....", options: ["Menekankan pada perubahan sikap mental peserta didik", "Menciptakan situasi belajar yang kompetitif", "Menyusun pembelajaran dari yang mudah ke yang sukar", "Menciptakan interaksi sosial antar peserta didik"], correctAnswer: 2 },
-        { question: "Berikut ini yang merupakan konsep dari pembelajaran terprogram adalah ....", options: ["Menuntut peserta didik untuk lebih banyak terlibat latihan (drill) dan mengikuti konsep operant conditioning serta pola stimulus-respons-penguatan", "Program didesain serba lengkap dan siap digunakan secara mandiri oleh peserta didik sesuai kemampuan masing-masing", "Memfokuskan pada tingkah laku yang tampak, dapat diamati, dan diukur", "Dapat digunakan untuk mengajarkan konsep baru kepada peserta didik"], correctAnswer: 0 },
-        { question: "Pembelajaran terprogram yang dikembangkan dari teori behavioristik menekankan pada", options: ["Pemberian pengalaman belajar terbuka tanpa urutan yang jelas", "Penyajian materi secara sistematis dalam unit kecil yang disertai umpan balik segera", "Kemandirian penuh mahasiswa tanpa intervensi instruktur", "Pengalaman belajar berdasarkan refleksi diri mahasiswa"], correctAnswer: 1 },
-        { question: "Di Sekolah Dasar \"Alam Terkembang\", setiap peserta didik boleh menyelesaikan setiap unit pembelajaran sesuai dengan kecepatan belajar masing-masing. Setelah menyelesaikan satu unit, peserta didik dapat melanjutkan ke unit berikutnya tanpa menunggu teman yang lain. Konsep ini merupakan penerapan teori behavioristik dengan konsep belajar ....", options: ["Terprogram", "Mandiri", "Tuntas", "Kolaborasi"], correctAnswer: 2 },
-        { question: "Dalam sebuah kelas, mahasiswa diminta mengerjakan soal latihan berulang-ulang hingga mampu menjawab benar tanpa kesalahan. Strategi ini sesuai dengan teori behavioristik karena", options: ["Memberi kebebasan penuh bagi mahasiswa menentukan alur belajar", "Mendorong mahasiswa membangun pengetahuan baru secara mandiri", "Menekankan konstruksi makna pribadi melalui refleksi", "Mengandalkan pengulangan stimulus-respons untuk memperkuat kebiasaan"], correctAnswer: 3 },
-        { question: "Salah satu kesimpulan yang dapat diambil dari penerapan teori behavioristik dalam pembelajaran adalah", options: ["Menggunakan ingatan dan proses berpikir untuk menyimpan pengetahuan dalam pikiran individu", "Menciptakan interaksi timbal balik antara individu dengan lingkungan", "Pembelajaran dibagi menjadi bagian-bagian kecil dan memberikan kesempatan yang sama kepada peserta didik untuk berpartisipasi aktif", "Meyakini bahwa peserta didik memiliki pengetahuan dasar dan keterampilan yang memungkinkan mereka mempelajari materi baru"], correctAnswer: 2 },
-        { question: "Kesimpulan yang dapat diambil bahwa pembelajaran dengan menggunakan teori behavioristik harus memperhatikan faktor eksternal (intelektual, sosial, maupun fisik) dilakukan dengan", options: ["Memberikan penguatan (reinforcement) apabila peserta didik bertingkah laku sesuai harapan pendidik", "Mengakui dan menghargai kemajuan peserta didik serta tidak mengharapkan semua peserta didik belajar dengan kecepatan yang sama", "Membantu peserta didik dengan membagi materi ke dalam bagian-bagian kecil, memberi kesempatan berpartisipasi aktif, dan menyediakan ruang belajar yang aman dan nyaman", "Yakin bahwa peserta didik memiliki pengetahuan dasar dan keterampilan yang memungkinkan mereka mempelajari materi baru"], correctAnswer: 2 },
-        { question: "Teori kognitivistik menekankan pada ....", options: ["Perubahan perilaku peserta didik", "Perkembangan fisik peserta didik", "Perkembangan jumlah pengetahuan peserta didik", "Proses mental peserta didik dalam belajar"], correctAnswer: 3 },
-        { question: "Dalam perspektif kognitivistik, kegagalan mahasiswa memahami materi dapat terjadi karena", options: ["Proses pengolahan informasi tidak optimal di memori jangka pendek", "Tidak ada penguatan positif yang diberikan dosen", "Mahasiswa tidak diberi latihan pengulangan perilaku sebelumnya", "Mahasiswa kurang terpapar stimulus lingkungan sekitar"], correctAnswer: 0 },
-        { question: "Perilaku seseorang yang dipengaruhi oleh tingkat perkembangan mental dan pemahaman atas dirinya sendiri disebut dengan teori belajar ....", options: ["Behavioristik", "Kognitivistik", "Sosial", "Konstruktivisme"], correctAnswer: 1 },
-        { question: "Seorang dosen ingin agar mahasiswa tidak hanya mengingat konsep teori komunikasi, tetapi juga mampu menggunakannya untuk menganalisis kasus nyata. Tujuan belajar ini sesuai perspektif kognitivistik karena menekankan", options: ["Penciptaan kebiasaan melalui latihan berulang", "Transfer dan penerapan pengetahuan dalam situasi baru", "Pemberian reward agar mahasiswa lebih termotivasi", "Penguatan perilaku melalui konsekuensi positif"], correctAnswer: 1 },
-        { question: "Menurut teori belajar kognitivistik, yang dimaksud dengan belajar adalah proses", options: ["Interaksional, peserta didik memperoleh pemahaman baru atau memperbarui pemahaman lama", "Pengenalan diri peserta didik dalam memperoleh pemahaman baru", "Perubahan sikap peserta didik dalam memperoleh pengetahuan baru", "Meningkatkan keterampilan sehingga memperoleh keterampilan baru"], correctAnswer: 0 },
-        { question: "Yang dimaksud belajar menurut teori belajar kognitivistik adalah", options: ["Belajar merupakan proses interaksional ketika seseorang memperoleh pemahaman baru, membangun struktur kognitif, dan memperbarui pemahaman lama", "Belajar merupakan proses pengenalan diri untuk memperoleh pemahaman baru", "Belajar merupakan proses perubahan sikap untuk memperoleh sikap baru", "Belajar merupakan proses meningkatkan keterampilan"], correctAnswer: 0 },
-        { question: "Faktor-faktor yang mempengaruhi perkembangan kognitif menurut Jean Piaget adalah", options: ["Persepsi, penyimpanan, dan perhatian", "Usia, jenis kelamin, dan kemampuan ekonomi", "Perkembangan biologis, lingkungan fisik, lingkungan sosial, dan ekuilibrasi", "Pekerjaan orang tua, sekolah, dan sarana belajar"], correctAnswer: 2 },
-        { question: "Seorang dosen memberikan tugas proyek kolaboratif agar mahasiswa saling berdiskusi. Faktor perkembangan kognitif yang ditekankan adalah ....", options: ["Faktor kematangan biologis", "Faktor pengalaman individual", "Faktor lingkungan sosial", "Faktor penguatan eksternal"], correctAnswer: 2 },
-        { question: "Menurut Jean Piaget, faktor-faktor yang mempengaruhi perkembangan kognitif individu adalah", options: ["Perhatian, persepsi, penyimpanan, dan pengolahan informasi", "Usia, jenis kelamin, dan kemampuan ekonomi", "Pekerjaan orang tua, sekolah, dan sarana belajar", "Perkembangan biologis, lingkungan fisik, lingkungan sosial, dan ekuilibrasi"], correctAnswer: 3 },
-        { question: "Seorang dosen meminta mahasiswa menganalisis dampak sosial dari penggunaan kecerdasan buatan (AI) dengan membuat hipotesis dan argumen. Aktivitas ini mencerminkan ciri", options: ["Tahap praoperasional", "Tahap operasional konkret", "Tahap operasional formal", "Tahap sensorimotor"], correctAnswer: 2 },
-        { question: "Tahap perkembangan kognitif individu pada usia 7-9 tahun adalah tahap operasional konkret. Tahap ini ditandai dengan poin berikut, kecuali", options: ["Berkembangnya kemampuan berpikir logis", "Mengenal objek di lingkungan terdekat", "Mulai dapat berpikir abstrak", "Mulai dapat berpikir konkret"], correctAnswer: 2 },
-        { question: "Urutan tahapan perkembangan kognitif menurut Jean Piaget yang benar adalah ...", options: ["Praoperasional, sensorimotor, operasional konkret, operasional formal", "Sensorimotor, operasional konkret, praoperasional, operasional formal", "Sensorimotor, praoperasional, operasional formal, operasional konkret", "Sensorimotor, praoperasional, operasional konkret, operasional formal"], correctAnswer: 3 },
-        { question: "Salah satu strategi yang dapat dilakukan oleh pendidik untuk mendukung teori perkembangan kognitif adalah", options: ["memperhatikan perkembangan fisik peserta didik", "menjelaskan tujuan sebelum memulai pembelajaran", "memberikan perhatian dalam pembelajaran", "menciptakan pembelajaran aktif"], correctAnswer: 3 },
-        { question: "Strategi yang dapat dilakukan oleh pendidik untuk menciptakan pembelajaran yang dapat memudahkan proses persepsi adalah", options: ["memberikan contoh konkret dan menjelaskan tujuan sebelum memulai pembelajaran", "memberikan perhatian isyarat kepada peserta didik", "memberikan perhatian dalam pembelajaran", "memberikan materi prasyarat sebelum memulai pembelajaran"], correctAnswer: 1 },
-        { question: "Ferdy, seorang siswa PAUD, memperhatikan gambar harimau dan kucing yang ditampilkan guru melalui PowerPoint. Guru kemudian meminta Ferdy menunjuk gambar kucing. Aktivitas memperhatikan gambar tersebut merupakan", options: ["input sensorik", "memori jangka pendek", "memori jangka panjang", "register sensorik"], correctAnswer: 3 },
-        { question: "Seorang dosen menampilkan gambar kompleks hanya beberapa detik, lalu meminta mahasiswa menjelaskan detail gambar tersebut. Aktivitas ini memanfaatkan fungsi ....", options: ["memori jangka panjang", "memori kerja", "metakognisi", "register sensorik"], correctAnswer: 3 },
-        { question: "Memori kerja (working memory) yang berhubungan dengan kesadaran atau apa yang seseorang sadari pada saat tertentu termasuk pemrosesan informasi", options: ["input sensorik", "register sensorik", "memori jangka pendek", "memori jangka panjang"], correctAnswer: 2 },
-        { question: "Artha sudah pernah belajar mengenai sistem pencernaan manusia. Saat ini Artha belajar tentang peran usus besar dalam pengolahan makanan dan mengaitkannya dengan materi yang pernah dipelajari. Aktivitas tersebut merupakan proses", options: ["perhatian", "pengkodean informasi", "persepsi", "pemanggilan kembali informasi"], correctAnswer: 3 },
-        { question: "Seorang dosen meminta mahasiswa membuat peta konsep untuk menghubungkan teori belajar dengan contoh penerapannya. Strategi ini mendukung pengkodean karena", options: ["membantu mahasiswa mengorganisasi informasi menjadi struktur yang bermakna", "membatasi informasi agar sesuai kapasitas memori sensorik", "memberi hukuman agar mahasiswa tidak salah menghafal", "mengulang informasi sampai tersimpan otomatis dalam memori jangka panjang"], correctAnswer: 0 },
-        { question: "Proses memasukkan informasi baru ke sistem pemrosesan informasi dan menyiapkannya untuk disimpan dalam memori jangka panjang disebut", options: ["pengkodean", "perhatian", "persepsi", "penyimpanan"], correctAnswer: 0 },
-        { question: "Mengapa keterampilan intelektual penting dalam pembelajaran menurut Gagné?", options: ["Karena membantu mahasiswa menghafal lebih cepat", "Karena memungkinkan mahasiswa mengorganisasi, mengklasifikasi, dan menggunakan konsep secara tepat", "Karena membuat mahasiswa lebih termotivasi oleh hadiah eksternal", "Karena menjamin mahasiswa memiliki sikap positif terhadap pembelajaran"], correctAnswer: 1 },
-        { question: "Nathan berlatih secara rutin memasukkan bola ke dalam ring basket. Aktivitas tersebut termasuk dalam ragam belajar", options: ["informasi verbal", "keterampilan intelektual", "keterampilan motorik", "strategi kognitif"], correctAnswer: 2 },
-        { question: "Kemampuan untuk membedakan, mengkombinasikan, mengorganisasikan, mengklasifikasikan, menganalisis, dan mengukur objek termasuk dalam ragam belajar ....", options: ["informasi verbal", "keterampilan intelektual", "strategi kognitif", "keterampilan motorik"], correctAnswer: 1 },
-        { question: "Sebelum menjelaskan materi baru, dosen meminta mahasiswa mengingat kembali pengalaman belajar sebelumnya yang relevan. Hal ini sesuai dengan peristiwa pembelajaran", options: ["memberikan bimbingan belajar", "menyajikan stimulus", "merangsang ingatan terhadap prasyarat belajar", "memberikan umpan balik"], correctAnswer: 2 },
-        { question: "Siswa kelas VII sedang melakukan praktik mencangkok pohon alpukat secara berkelompok. Guru berkeliling memeriksa hasil kerja siswa dan memberikan masukan. Aktivitas guru tersebut termasuk peristiwa pembelajaran", options: ["memberikan bimbingan belajar", "mengingat kembali konsep dan prinsip", "menyampaikan materi pembelajaran", "menimbulkan minat dan menarik perhatian"], correctAnswer: 0 },
-        { question: "Untuk memastikan peserta didik siap belajar dan berpartisipasi, pendidik perlu menyajikan stimulus atau rangsangan untuk menarik perhatian peserta didik. Hal ini termasuk peristiwa pembelajaran", options: ["menginformasikan tujuan pembelajaran", "mengingat kembali konsep dan prinsip", "menyampaikan materi pembelajaran", "menimbulkan minat dan menarik perhatian"], correctAnswer: 3 },
-        { question: "Menurut teori belajar sosial, belajar pada manusia terutama terjadi melalui ....", options: ["observasi terhadap perilaku orang lain dalam lingkungan sosial", "proses stimulus-respons yang berulang tanpa keterlibatan orang lain", "pembentukan kebiasaan melalui penguatan positif dan negatif", "proses otomatis penyimpanan informasi dalam memori jangka panjang"], correctAnswer: 0 },
-        { question: "Bu Septi mengajak siswa kelas VI melakukan observasi aktivitas ekonomi di lingkungan rumah mereka dan melakukan wawancara kepada pemilik usaha. Aktivitas tersebut menunjukkan konsep dasar teori belajar sosial, yaitu belajar", options: ["melalui percobaan", "dengan mengembangkan kepribadian", "terjadi di lingkungan sosial", "dilakukan di mana pun"], correctAnswer: 2 },
-        { question: "Seseorang bertindak berdasarkan standar internal dan penilaiannya sendiri terhadap tindakannya. Pendapat ini didasarkan pada teori belajar", options: ["belajar sosial berpijak dari teori behavioristik", "belajar pada manusia terjadi di lingkungan sosial", "belajar melalui pengamatan", "belajar sosial dan pengembangan pribadi"], correctAnswer: 3 },
-        { question: "Pengaturan diri meliputi tiga tahap, yaitu pemikiran sebelumnya, mengontrol kinerja, dan refleksi diri. Pendapat ini dikemukakan oleh", options: ["Zimmerman (1988, 2000)", "Tolman dan Honzik (1930)", "Carl Rogers (1902-1987)", "Norman (1976)"], correctAnswer: 0 },
-        { question: "Seorang siswa meniru cara gurunya mengucapkan kata-kata bahasa Inggris dengan baik setelah melihat contoh di kelas. Proses ini menunjukkan ....", options: ["belajar melalui pengalaman langsung", "belajar melalui penguatan eksternal", "belajar dari orang lain (observational learning)", "belajar melalui classical conditioning"], correctAnswer: 2 },
-        { question: "Untuk belajar membuat kolam ikan air tawar, Pak Reza mengajak pemilik usaha pemancingan untuk membimbing siswa. Dalam teori belajar sosial, upaya tersebut merupakan penerapan prinsip", options: ["Tut Wuri Handayani", "belajar sepanjang hayat", "belajar dari orang lain", "pemanfaatan sumber belajar"], correctAnswer: 3 },
-        { question: "Seorang dosen memperagakan cara menggunakan alat peraga dalam pembelajaran IPA. Mahasiswa mengamati dan kemudian mempraktikkannya sendiri. Menurut teori Bandura, mahasiswa telah melalui tahapan", options: ["Perhatian → Retensi", "Retensi → Motivasi Reproduksi motorik → Motivasi Pengulangan → Respons", "Perhatian Hukuman → Penguatan → Pengulangan", "Retensi → Refleksi Reaksi → Respons kognitif"], correctAnswer: 0 },
-        { question: "Berikut ini yang tidak termasuk dalam fungsi modeling adalah", options: ["Larangan", "Fasilitasi respons", "Pengembangan ide", "Belajar melalui pengamatan"], correctAnswer: 3 },
-        { question: "Berikut ini adalah fungsi-fungsi pemodelan dari Teori Belajar Sosial Albert Bandura, kecuali", options: ["Pemberian hadiah dan hukuman", "Belajar melalui pengamatan", "Fasilitasi respons", "Larangan"], correctAnswer: 0 },
-        { question: "Diberikan contoh kasus di sekolah masa pandemi Covid-19, mahasiswa mampu memberikan pertimbangan ide usaha kepada kepala sekolah dalam perspektif mewujudkan sekolah efektif. Tujuan capaian pembelajaran ini masuk dalam kawasan ....", options: ["Psikomotorik", "Kognitif", "Afektif", "Efektif"], correctAnswer: 1 },
-        { question: "Dalam konteks pembelajaran humanistik, kawasan afektif lebih menekankan pada kemampuan mahasiswa untuk", options: ["Menghafal dan mengingat informasi dengan akurat", "Mengorganisasi dan menilai nilai-nilai yang memengaruhi sikap dan perilaku belajar", "Menunjukkan kemampuan berpikir kritis dan pemecahan masalah", "Mengembangkan keterampilan motorik dalam menggunakan alat pembelajaran"], correctAnswer: 1 },
-        { question: "Diberikan contoh kasus perundungan (bullying) di sekolah, siswa mampu menunjukkan perilaku menolak perundungan. Capaian pembelajaran ini masuk dalam kawasan ....", options: ["Psikomotorik", "Kognitif", "Afektif", "Efektif"], correctAnswer: 2 },
-        { question: "Peserta didik kelas VIII menghadapi kejadian korsleting listrik di sekolah. Mereka tidak dapat menjelaskan mengapa peristiwa itu terjadi. Berdasarkan teori David Kolb, kondisi peserta didik ini masuk pada tahap ....", options: ["Pengamatan reflektif", "Pengalaman konkret", "Eksperimentasi aktif", "Konseptualisasi abstrak"], correctAnswer: 1 },
-        { question: "Dalam pelajaran Fisika, peserta didik mampu memahami asal-usul sebuah rumus dan menerapkannya untuk memecahkan masalah. Berdasarkan teori David Kolb, kondisi peserta didik tersebut sudah masuk pada tahap", options: ["Pengamatan reflektif", "Pengalaman konkret", "Eksperimentasi aktif", "Konseptualisasi abstrak"], correctAnswer: 3 },
-        { question: "Dosen meminta mahasiswa menganalisis pengalaman kerja lapangan mereka, mendiskusikan apa yang berhasil dan tidak berhasil, lalu menyimpulkan pelajaran dari pengalaman tersebut. Aktivitas ini mencerminkan tahap ....", options: ["Eksperimentasi aktif", "Pengalaman konkret", "Pengamatan reflektif", "Konseptualisasi abstrak"], correctAnswer: 2 },
-        { question: "Sonny senang bermain musik, tetapi tidak bersemangat ketika guru hanya menjelaskan teori alat musik tanpa praktik. Sonny termasuk peserta didik tipe", options: ["Pragmatis", "Reflektor", "Aktivis", "Teoris"], correctAnswer: 0 },
-        { question: "Peserta didik yang menyukai metode yang mendorong menemukan sesuatu yang baru, berpikiran terbuka, dan senang berdiskusi termasuk tipe ....", options: ["Teoris", "Reflektor", "Aktivis", "Pragmatis"], correctAnswer: 2 },
-        { question: "Peserta didik tipe aktivis menurut Honey dan Mumford cenderung belajar dengan cara ....", options: ["Mengamati terlebih dahulu sebelum mencoba sesuatu", "Terlibat langsung dalam pengalaman baru dan menyukai tantangan praktis", "Menyusun rencana belajar secara hati-hati sebelum bertindak", "Merefleksikan pengalaman lama untuk menemukan pola berpikir baru"], correctAnswer: 1 },
-        { question: "Dalam konteks pembelajaran, contoh penerapan belajar emansipatoris adalah ketika mahasiswa", options: ["Menyelesaikan latihan soal secara berulang sampai mahir", "Menghafal teori tanpa mempertanyakan konteks penerapannya", "Mengkritisi kebijakan pendidikan yang tidak adil dan mengusulkan solusi", "Mengamati praktik dosen tanpa memberikan umpan balik"], correctAnswer: 2 },
-        { question: "Berdasarkan domain pengetahuan menurut Habermas, relasi antara manusia, masyarakat, dan budaya termasuk kategori pengetahuan ....", options: ["Teknis", "Praktis", "Empiris", "Emansipatoris"], correctAnswer: 1 },
-        { question: "Gunawan sangat senang bertualang dan menjelajah berbagai tempat yang dianggap menarik. Gunawan termasuk kategori belajar tipe ....", options: ["Teknis", "Praktis", "Empiris", "Emansipatoris"], correctAnswer: 2 },
-        { question: "Rania sangat senang menolong teman-temannya sehingga disukai oleh teman sekelasnya. Dalam teori Maslow, perilaku Rania menunjukkan kebutuhan", options: ["Fisiologis", "Aktualisasi diri", "Rasa aman", "Sosial"], correctAnswer: 3 },
-        { question: "Menurut Maslow, kebutuhan aktualisasi diri muncul ketika individu", options: ["Berusaha memperoleh rasa aman dari lingkungan", "Memprioritaskan kebutuhan fisiologis", "Telah memenuhi kebutuhan dasar dan ingin mengembangkan potensi tertingginya", "Ingin diterima dan disukai kelompoknya"], correctAnswer: 2 },
-        { question: "Mahasiswa bergabung dalam WhatsApp Group agar dapat berkomunikasi dan belajar bersama teman-temannya. Menurut Maslow, hal ini termasuk kebutuhan", options: ["Sosial", "Fisiologis", "Aktualisasi diri", "Rasa aman"], correctAnswer: 0 },
-        { question: "Dalam pandangan Rogers, hubungan antara belajar dan perubahan ditentukan oleh ....", options: ["Seberapa banyak peserta didik mampu meniru perilaku guru", "Keterlibatan pribadi peserta didik dalam proses pembelajaran", "Seberapa banyak materi yang dapat diingat untuk ujian", "Kedisiplinan peserta didik dalam mengikuti aturan belajar"], correctAnswer: 1 },
-        { question: "Salah satu konsep penting yang dikemukakan oleh Vygotsky dalam proses belajar peserta didik adalah scaffolding, yang berarti bahwa", options: ["Kesiapan individu untuk belajar sangat bergantung pada stimulus lingkungan", "Bantuan belajar diberikan secara bertahap sesuai perkembangan peserta didik", "Peserta didik mengkonstruksikan ilmu berdasarkan kematangan intelektualnya", "Struktur perkembangan kognitif peserta didik melalui asimilasi, akomodasi, dan ekuilibrasi"], correctAnswer: 1 },
-        { question: "Prinsip utama teori konstruktivisme sosial Vygotsky menekankan bahwa ....", options: ["belajar bersifat individual dan bebas konteks", "semua siswa harus belajar dengan cara yang sama", "pengetahuan dibangun melalui interaksi sosial dan budaya", "pembelajaran terbaik terjadi tanpa bimbingan guru"], correctAnswer: 2 },
-        { question: "Asumsi para ahli konstruktivisme memandang peran guru sebagai ....", options: ["penentu satu jawaban yang benar", "pemberi informasi utama dalam proses belajar", "pengendali penuh kegiatan kelas bersama peserta didik", "fasilitator yang membantu siswa membangun makna"], correctAnswer: 3 },
-        { question: "Salah satu asumsi dasar tentang bagaimana belajar terjadi menurut teori konstruktivisme adalah karena peserta didik ....", options: ["sangat dipengaruhi oleh lingkungan tempat ia berada", "telah mendapatkan pengetahuan dari pendidik", "harus memahami apa yang telah diajarkan", "aktif mengembangkan pengetahuannya sendiri"], correctAnswer: 3 },
-        { question: "Asumsi dasar yang melandasi teori konstruktivistik tentang bagaimana belajar terjadi adalah", options: ["peserta didik aktif mengembangkan pengetahuannya sendiri", "proses berpikir peserta didik sangat dipengaruhi oleh lingkungan", "pendidik menyampaikan pengetahuan kepada peserta didik", "peserta didik harus memahami apa yang telah diajarkan"], correctAnswer: 0 },
-        { question: "Di kelas IV SD, Erika membeli 7 kue dengan harga masing-masing Rp3.000,00 dan dapat menghitung sendiri jumlah yang harus dibayarkan. Menurut teori konstruktivisme, proses belajar seperti ini termasuk pembentukan pengetahuan pada tahap", options: ["restrukturisasi ide", "elisitasi", "penggunaan ide", "orientasi"], correctAnswer: 2 },
-        { question: "Mahasiswa yang memperbaiki pemahamannya setelah menemukan hasil eksperimen yang berbeda sedang melakukan", options: ["rekonstruksi ide", "reproduksi data", "penguatan kebiasaan", "transfer hafalan"], correctAnswer: 0 },
-        { question: "Dalam pembelajaran, peserta didik diberikan kesempatan mengembangkan motivasi dengan melakukan observasi terhadap topik yang akan dipelajari. Menurut teori konstruktivistik, pengalaman belajar ini termasuk tahap", options: ["restrukturisasi ide", "elisitasi", "penggunaan ide", "orientasi"], correctAnswer: 3 },
-        { question: "Diana sangat senang menjahit dan belajar menjahit secara otodidak melalui YouTube. Menurut teori Carl Rogers, perilaku Diana termasuk kategori proses belajar humanistik yaitu belajar", options: ["bermakna", "tanpa hukuman", "sepanjang hayat", "dengan inisiatif sendiri"], correctAnswer: 3 },
-        { question: "Contoh penerapan metode penyelidikan (inquiry) dalam pembelajaran Teknologi Pendidikan adalah ketika mahasiswa", options: ["mencatat isi kuliah untuk dihafalkan", "menonton video pembelajaran tanpa diskusi", "meneliti efektivitas media pembelajaran melalui eksperimen sederhana", "mencari bahan tugas dari buku materi pokok"], correctAnswer: 2 },
-        { question: "Metode pembelajaran untuk mendorong, membimbing, dan mengukur sejauh mana peserta didik mengenali konsep-konsep pada topik yang dipelajari adalah ....", options: ["metode inquiry (penyelidikan)", "demonstrasi atau peragaan", "diskusi dan presentasi", "tanya jawab (questioning)"], correctAnswer: 3 },
-        { question: "Mengapa penerapan pendekatan konstruktivisme sulit dilakukan di kelas besar?", options: ["siswa cenderung pasif dan enggan berinteraksi", "siswa tidak suka bekerja sama dalam kelompok", "metode ini tidak melibatkan guru sama sekali", "setiap siswa memerlukan bimbingan dan umpan balik individual"], correctAnswer: 3 },
-        { question: "Salah satu keterbatasan penerapan teori belajar konstruktivisme adalah", options: ["memerlukan waktu yang lama untuk belajar", "memerlukan sarana dan prasarana yang lengkap", "pendidik harus selalu siap membantu peserta didik", "hasil konstruksi pengetahuan peserta didik berpotensi tidak sesuai dengan kaidah ilmu"], correctAnswer: 3 },
-        { question: "Menurut teori belajar konstruktivisme, peran pendidik yang paling tepat adalah", options: ["menyediakan berbagai kegiatan yang merangsang rasa ingin tahu peserta didik dan membantu mereka mengekspresikan gagasannya", "selalu memberikan motivasi agar peserta didik aktif dan kreatif", "merencanakan pengalaman belajar yang menyenangkan", "menyediakan berbagai pengalaman belajar yang harus diikuti peserta didik secara disiplin"], correctAnswer: 0 },
-        { question: "Contoh penerapan perspektif endogenous dalam pembelajaran adalah", options: ["mahasiswa merefleksikan pengalaman belajar untuk memperbaiki pemahaman konsep", "mahasiswa meniru cara penyelesaian tugas dari temannya", "dosen memberi contoh langkah-langkah yang harus diikuti", "mahasiswa menghafal penjelasan dosen"], correctAnswer: 0 },
-        { question: "Perspektif exogenous dalam teori konstruktivisme berpandangan bahwa", options: ["pengetahuan berasal dari interaksi antara seseorang dengan lingkungannya", "pengetahuan berasal dari pengetahuan sebelumnya yang telah dimiliki peserta didik", "pengetahuan dikembangkan melalui abstraksi pemahaman kognitif", "pengetahuan merupakan hasil rekonstruksi dunia luar"], correctAnswer: 0 },
-        { question: "Perspektif dialektikal dalam teori konstruktivisme memfokuskan belajar sebagai proses pemerolehan pengetahuan melalui", options: ["interaksi peserta didik dengan lingkungannya", "abstraksi pemahaman kognitif peserta didik", "proses peserta didik merekonstruksi dunia luar", "pengetahuan sebelumnya yang dimiliki peserta didik"], correctAnswer: 0 },
-        { question: "Selain sebagai tokoh teori perkembangan kognitif, Jean Piaget juga merupakan penggagas teori konstruktivisme. Berikut ini pandangannya tentang belajar, kecuali", options: ["kesiapan individu untuk belajar sangat bergantung pada stimulus lingkungan dan bimbingan dari orang lain yang kompeten", "pengetahuan dibangun melalui interaksi aktif fisik dan mental terhadap pengalaman", "perkembangan kognitif anak memungkinkan mereka mengonstruksi pengetahuan secara berbeda sesuai kematangan intelektual", "struktur perkembangan kognitif anak melalui proses asimilasi, akomodasi, dan ekuilibrasi"], correctAnswer: 0 },
-        { question: "Salah satu konsep penting yang dikemukakan oleh Vygotsky dalam proses belajar peserta didik adalah scaffolding, yang berarti bahwa", options: ["kesiapan belajar bergantung pada stimulus lingkungan", "bantuan belajar diberikan secara bertahap sesuai perkembangan peserta didik", "peserta didik membangun ilmu sesuai kematangan intelektualnya", "perkembangan kognitif melalui asimilasi, akomodasi, dan ekuilibrasi"], correctAnswer: 1 },
-        { question: "Berikut ini yang bukan contoh penerapan model pembelajaran eksperiensial (experiential learning) di kelas adalah", options: ["mahasiswa mengamati fenomena lalu mendiskusikan maknanya", "mahasiswa membuat proyek dan merefleksikan hasilnya", "mahasiswa mempraktikkan teori dalam situasi nyata", "mahasiswa mencatat kuliah tanpa interaksi"], correctAnswer: 3 },
-        { question: "Berikut ini merupakan kontribusi teori belajar behaviorisme dalam pembelajaran masa kini, kecuali", options: ["pembelajaran berbantuan komputer", "tutorial terprogram", "pembelajaran langsung", "pembelajaran konsep"], correctAnswer: 3 },
-        { question: "Berikut ini manakah yang merupakan kontribusi teori belajar kognitivisme dalam pembelajaran masa kini?", options: ["Belajar dari orang lain", "Pembelajaran konsep", "Program magang di tempat kerja", "Pembelajaran berbantuan komputer"], correctAnswer: 1 },
-        { question: "Prinsip utama dalam Personalized System of Instruction (PSI) menurut Keller (1968) adalah", options: ["Dosen menjadi sumber utama pengetahuan dan mahasiswa hanya belajar dari dosen", "Semua mahasiswa mengikuti jadwal yang sama", "Setiap mahasiswa belajar sesuai dengan kecepatan dan kemampuannya sendiri", "Evaluasi dilakukan hanya pada akhir semester"], correctAnswer: 2 },
-        { question: "Dalam penerapan teori konstruktivisme dengan metode ilmiah, salah satu contoh cara peserta didik mengkomunikasikan pengetahuannya adalah dengan", options: ["Mengumpulkan informasi dari sumbernya", "Membuat poster dari hasil observasi", "Mengamati alam lingkungan sekitar", "Mengolah informasi menjadi data"], correctAnswer: 1 },
-        { question: "Metode pengumpulan data untuk memenuhi rasa ingin tahu peserta didik dan menemukan fakta adanya hubungan antara objek sehingga proses pembelajaran menjadi lebih bermakna dilakukan dengan cara", options: ["Mengumpulkan informasi", "Bertanya", "Mengamati", "Mengasosiasikan/mengolah informasi"], correctAnswer: 2 },
-        { question: "Contoh kegiatan yang mencerminkan tahap mengasosiasikan adalah ....", options: ["Mahasiswa menunggu arahan dari dosen dan bertanya kepada dosen", "Mahasiswa menyalin teori dari buku teks untuk mengerjakan tugas analisis", "Mahasiswa mengamati fenomena alam dan mencatat hasil pengamatan pada lembar observasi", "Mahasiswa membandingkan hasil dua eksperimen untuk mencari persamaan dan perbedaan"], correctAnswer: 3 },
-        { question: "Fokus evaluasi dalam pendekatan konstruktivisme adalah", options: ["Kemampuan siswa dalam mencapai tujuan pembelajaran yang dirumuskan", "Unjuk kemampuan kognitif, psikomotor, dan afektif", "Nilai prestasi yang tinggi", "Jenis instrumen atau tes yang digunakan dalam evaluasi"], correctAnswer: 1 },
-        { question: "Dampak penerapan konstruktivisme terhadap desain sumber belajar digital adalah", options: ["Sumber belajar harus memungkinkan eksplorasi dan umpan balik dinamis", "Sumber belajar dibuat hanya untuk penyampaian konten dan video", "Penggunaan teknologi dianggap tidak penting, cukup media cetak saja", "Sumber belajar cukup berupa teks tertulis tanpa multimedia"], correctAnswer: 0 },
-        { question: "Salah satu dampak dari penerapan teori konstruktivisme terhadap evaluasi hasil belajar adalah digunakannya instrumen evaluasi autentik berupa", options: ["Tes pilihan ganda", "Unjuk kerja", "Tes uraian", "Wawancara"], correctAnswer: 1 },
-        { question: "Ciri utama model Problem-Based Learning adalah", options: ["Guru menyampaikan teori terlebih dahulu sebelum memberi tugas", "Pembelajaran dimulai dari permasalahan nyata yang relevan dengan kehidupan", "Siswa berlatih menghafal rumus untuk ujian", "Pembelajaran berfokus pada penjelasan guru"], correctAnswer: 1 },
-        { question: "Pembelajaran berbasis masalah dapat dilakukan dengan salah satu cara, yaitu", options: ["Menyiapkan pertanyaan-pertanyaan untuk diskusi kelas", "Memberikan tugas kepada peserta didik untuk dikerjakan di kelas", "Melibatkan peserta didik dengan masalah langsung pada lingkungannya", "Mengembangkan program komputer untuk memfasilitasi belajar peserta didik"], correctAnswer: 2 },
-        { question: "Meskipun e-learning menyediakan akses bagi peserta didik ke berbagai sumber, yang perlu lebih diperhatikan oleh pendidik adalah", options: ["Apakah peserta didik memperoleh keterampilan baru", "Apakah peserta didik mendapatkan teman baru", "Apakah peserta didik memperoleh sumber belajar baru", "Apakah peserta didik mendapat masalah baru"], correctAnswer: 0 },
-        { question: "Kegiatan yang penting dilakukan dalam pembelajaran dengan bantuan teman sebaya (peer-assisted learning) adalah", options: ["Pendidik mengajukan pertanyaan kepada peserta didik", "Pembimbingan dilakukan kepada sesama teman", "Teman sebaya membuatkan tugas temannya", "Tutor sebaya adalah pengganti pendidik di kelas"], correctAnswer: 1 },
-        { question: "Beberapa hasil penelitian menunjukkan bahwa pembelajaran dengan bantuan teman sebaya paling efektif untuk peserta didik dengan ciri-ciri berikut, kecuali ...", options: ["Tempat tinggal di perkotaan", "Dari keluarga berpenghasilan rendah", "Anak-anak minoritas", "Berusia remaja"], correctAnswer: 0 },
-        { question: "Salah satu contoh kegiatan yang penting dilakukan pendidik dalam model pembelajaran discovery learning adalah", options: ["Mengumpulkan informasi", "Memberikan masalah", "Merumuskan aturan", "Merumuskan tujuan pembelajaran"], correctAnswer: 1 },
-        { question: "Berikut ini merupakan contoh penerapan Collaborative Learning, yaitu ....", options: ["Mahasiswa mendengarkan dosen memberikan kuliah umum di auditorium", "Mahasiswa mengerjakan tugas secara individu tanpa diskusi", "Mahasiswa berdiskusi dalam kelompok kecil untuk menyelesaikan studi kasus", "Mahasiswa berdiskusi mengenai topik yang sedang trending"], correctAnswer: 2 },
-        { question: "Dalam pembelajaran sains, kegiatan yang mencerminkan Discovery Learning adalah", options: ["Guru mendemonstrasikan eksperimen dan siswa hanya menonton", "Guru menjelaskan teori Archimedes secara detail sejak awal pembelajaran", "Siswa menghafal rumus fisika dari buku", "Siswa menemukan sendiri prinsip daya apung setelah melakukan percobaan sederhana"], correctAnswer: 3 },
-        { question: "Peserta didik belajar pengetahuan baru yang relevan dengan menerapkan pemecahan masalah secara umum seperti berikut ini, kecuali", options: ["Menguji hipotesis", "Melaporkan hasil", "Mengumpulkan informasi", "Merumuskan aturan"], correctAnswer: 3 },
-        { question: "Salah satu asumsi dasar dalam teori belajar sosial humanistik dalam pembelajaran adalah pentingnya faktor", options: ["Kesadaran diri sendiri", "Kreativitas", "Pemrosesan informasi", "Stimulus-respon"], correctAnswer: 0 },
-        { question: "Menurut teori humanistik, tujuan utama pembelajaran adalah membantu peserta didik untuk", options: ["Menguasai seluruh materi pelajaran secara sempurna", "Mencapai perkembangan diri secara optimal dan aktualisasi diri", "Menghafal konsep-konsep yang diberikan guru", "Mendapatkan nilai yang tinggi pada setiap ujian"], correctAnswer: 1 },
-        { question: "Dalam teori humanistik, peran guru yang paling tepat adalah sebagai", options: ["Sumber utama pengetahuan", "Pengontrol seluruh kegiatan belajar siswa", "Fasilitator yang membantu peserta didik mengembangkan potensinya", "Pemberi hukuman agar peserta didik disiplin"], correctAnswer: 2 }
+        // Soal 1
+        {
+            question: "Menurut Gagné, perubahan perilaku hasil belajar bersifat relatif permanen karena.",
+            options: [
+                /* A */ "dipengaruhi oleh faktor keturunan",
+                /* B */ "dapat bertahan lama selama individu mengulanginya terus-menerus sampai individu tersebut mengingatnya",
+                /* C */ "terjadi melalui pengalaman masa lalu ataupun dari pembelajaran yang bertujuan atau direncanakan",
+                /* D */ "tidak memerlukan proses penguatan (reinforcement)"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 2
+        {
+            question: "Menurut Meyer, pengertian belajar adalah adanya perubahan pengetahuan dan perilaku individu yang bersifat",
+            options: [
+                /* A */ "relatif permanen",
+                /* B */ "permanen",
+                /* C */ "selamanya",
+                /* D */ "singkat"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 3
+        {
+            question: "Gagné, seorang ahli Teknologi Pendidikan, menyampaikan bahwa belajar merupakan proses alami yang mengubah",
+            options: [
+                /* A */ "pengetahuan, keterampilan, dan sikap",
+                /* B */ "pengetahuan, cara hidup, cara berpikir",
+                /* C */ "keterampilan, cara berpikir, dan cara hidup",
+                /* D */ "sikap dan pengetahuan"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 4
+        {
+            question: "Menurut Ambrose, belajar menunjukkan ciri-ciri berupa",
+            options: [
+                /* A */ "proses perubahan - pengalaman belajar",
+                /* B */ "produk - proses - output",
+                /* C */ "perubahan - produk - output",
+                /* D */ "output - kompetensi - proses"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 5
+        {
+            question: "Gagné berpendapat bahwa salah satu ciri seseorang telah belajar adalah",
+            options: [
+                /* A */ "menunjukkan kecerdasan",
+                /* B */ "memberikan respon",
+                /* C */ "memiliki kemampuan baru",
+                /* D */ "membantu orang lain untuk belajar"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 6
+        {
+            question: "Menurut Ambrose dkk. (2010), belajar ditandai oleh proses perubahan ....",
+            options: [
+                /* A */ "kebiasaan siswa dalam menyelesaikan tugas harian",
+                /* B */ "struktur pengetahuan yang dimiliki individu",
+                /* C */ "gaya belajar yang diwariskan sejak lahir",
+                /* D */ "keterampilan psikomotor tanpa melibatkan aspek kognitif"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 7
+        {
+            question: "Contoh paling tepat dari belajar asosiasi verbal adalah",
+            options: [
+                /* A */ "menghafalkan urutan warna pada pelangi mejikuhibiniu",
+                /* B */ "memahami konsep gaya gravitasi melalui eksperimen",
+                /* C */ "menyusun laporan hasil observasi dengan metode ilmiah",
+                /* D */ "menganalisis sebab-akibat dalam kasus konflik sosial"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 8
+        {
+            question: "Manakah kegiatan belajar berikut yang menunjukkan belajar sebagai proses asosiasi verbal?",
+            options: [
+                /* A */ "Pak Rudi mengetuk papan tulis ketika siswanya bersuara ramai selama belajar",
+                /* B */ "Bu Kristi memberikan lambang 3 bintang di buku kerja siswa terbaik",
+                /* C */ "Pak Randi meminta siswa memperbaiki jawaban soal yang salah",
+                /* D */ "Bu Tina meminta siswa menjawab nama hewan ketika ditunjukkan gambar harimau"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 9
+        {
+            question: "Manakah kegiatan belajar berikut yang menunjukkan belajar sebagai proses membedakan (discrimination)?",
+            options: [
+                /* A */ "Primus mampu mengidentifikasi berbagai bentuk bangun geometri",
+                /* B */ "Pak Randi meminta siswa memperbaiki jawaban soal yang salah",
+                /* C */ "Bu Tina meminta siswa menjawab nama hewan ketika ditunjukkan foto harimau",
+                /* D */ "Alfina mampu membedakan bilangan prima dengan bilangan ganjil"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 10
+        {
+            question: "Mahasiswa mempraktikkan langkah-langkah penggunaan aplikasi e-learning Moodle untuk membuat kuis interaktif. Aktivitas tersebut termasuk dalam kategori pengetahuan",
+            options: [
+                /* A */ "faktual",
+                /* B */ "konseptual",
+                /* C */ "prosedural",
+                /* D */ "metakognitif"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 11
+        {
+            question: "Perhatikan rumusan capaian pembelajaran berikut:\n\"Diberikan kasus pencemaran lingkungan di lokasi tempat pembuangan sampah, peserta didik mampu memberikan rekomendasi cara pengelolaan sampah rumah tangga.\"\nRumusan tersebut termasuk jenis pengetahuan kognitif....",
+            options: [
+                /* A */ "evaluasi",
+                /* B */ "sintesis",
+                /* C */ "aplikasi",
+                /* D */ "pemahaman"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 12
+        {
+            question: "Perhatikan rumusan capaian pembelajaran berikut:\n\"Setelah mempelajari materi tentang cuaca, siswa mampu menjelaskan proses terjadinya hujan.\"\nRumusan tersebut termasuk jenis pengetahuan kognitif ....",
+            options: [
+                /* A */ "evaluasi",
+                /* B */ "sintesis",
+                /* C */ "aplikasi",
+                /* D */ "pemahaman"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 13
+        {
+            question: "Berikut adalah contoh motivasi ekstrinsik peserta didik dalam belajar, kecuali ....",
+            options: [
+                /* A */ "Anstri belajar Kimia karena orang tuanya ingin Anstri menjadi apoteker",
+                /* B */ "Rudy kecewa karena orang tuanya tidak memberikan hadiah ketika ia naik kelas",
+                /* C */ "Ihsan menentukan target ia harus mendapatkan skor 100 dalam pelajaran Agama",
+                /* D */ "Ronald mengincar hadiah sepeda bila ia mendapatkan ranking 1"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 14
+        {
+            question: "Menurut teori motivasi belajar, motivasi intrinsik dapat memengaruhi proses pembelajaran karena",
+            options: [
+                /* A */ "membuat mahasiswa fokus pada hasil akhir, bukan proses",
+                /* B */ "menumbuhkan semangat belajar yang berkelanjutan dan mandiri",
+                /* C */ "mendorong mahasiswa untuk mengandalkan hadiah eksternal",
+                /* D */ "mengurangi keinginan mahasiswa untuk mengeksplorasi pengetahuan"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 15
+        {
+            question: "Berikut adalah contoh motivasi ekstrinsik peserta didik dalam belajar",
+            options: [
+                /* A */ "Amy senang belajar Fisika karena ingin kuliah di Teknik Elektro",
+                /* B */ "Gafur kecewa terhadap orang tuanya yang tidak memberikan hadiah ketika ia naik kelas",
+                /* C */ "Lia menentukan target mendapat skor 100 dalam Matematika",
+                /* D */ "Anton mampu menyeimbangkan waktu belajar dengan bermain"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 16
+        {
+            question: "Berikut adalah faktor eksternal yang mempengaruhi belajar peserta didik, kecuali ....",
+            options: [
+                /* A */ "lingkungan tempat tinggal peserta didik",
+                /* B */ "kondisi keluarga peserta didik",
+                /* C */ "status sosial ekonomi peserta didik",
+                /* D */ "minat peserta didik untuk belajar"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 17
+        {
+            question: "Seorang mahasiswa merasa sulit fokus belajar karena lingkungan rumahnya bising dan kurang kondusif. Masalah tersebut berkaitan dengan",
+            options: [
+                /* A */ "faktor internal berupa kesiapan belajar",
+                /* B */ "faktor eksternal berupa tingkat kecerdasan teman sebaya",
+                /* C */ "faktor internal berupa gaya belajar individu",
+                /* D */ "faktor eksternal berupa kondisi lingkungan belajar"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 18
+        {
+            question: "Salah satu faktor internal yang mempengaruhi belajar peserta didik adalah ....",
+            options: [
+                /* A */ "status sosial ekonomi peserta didik",
+                /* B */ "kondisi keluarga peserta didik",
+                /* C */ "minat peserta didik untuk belajar",
+                /* D */ "lingkungan tempat tinggal peserta didik"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 19
+        {
+            question: "Pembelajaran adalah pengaturan dan penciptaan kondisi-kondisi eksternal sedemikian rupa sehingga menunjang proses belajar peserta didik. Pengertian ini dikemukakan oleh",
+            options: [
+                /* A */ "Kaufman",
+                /* B */ "Smaldino",
+                /* C */ "Gagné",
+                /* D */ "Winkel"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 20
+        {
+            question: "Menurut Gagné (1977), salah satu faktor eksternal penting yang harus disiapkan dalam pembelajaran adalah",
+            options: [
+                /* A */ "motivasi peserta didik",
+                /* B */ "motivasi pendidik",
+                /* C */ "kegiatan belajar peserta didik",
+                /* D */ "kesehatan peserta didik"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 21
+        {
+            question: "Contoh penerapan konsep pembelajaran menurut Smaldino adalah",
+            options: [
+                /* A */ "Mahasiswa mempelajari teori tanpa praktik dan tanpa media.",
+                /* B */ "Dosen menyampaikan materi hanya melalui ceramah sepanjang perkuliahan.",
+                /* C */ "Dosen merancang aktivitas diskusi berbasis video interaktif pada LMS.",
+                /* D */ "Mahasiswa belajar sendiri tanpa adanya tujuan pembelajaran."
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 22
+        {
+            question: "Dari kegiatan berikut ini, manakah yang bukan merupakan kegiatan pembelajaran?",
+            options: [
+                /* A */ "Pendidik mengajar peserta didik.",
+                /* B */ "Pendidik membagikan buku paket kepada peserta didik.",
+                /* C */ "Pendidik membimbing peserta didik melakukan observasi lapangan.",
+                /* D */ "Pendidik menyajikan materi tentang proses terjadinya hujan."
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 23
+        {
+            question: "Pernyataan yang tepat mengenai hubungan antara pengajaran dan pembelajaran adalah ....",
+            options: [
+                /* A */ "Pengajaran dan pembelajaran adalah dua proses yang sama.",
+                /* B */ "Pembelajaran dapat terjadi tanpa pengajaran, tetapi pengajaran tidak selalu menghasilkan pembelajaran.",
+                /* C */ "Pengajaran selalu menjamin keberhasilan pembelajaran.",
+                /* D */ "Pembelajaran hanya dapat dilakukan melalui pengajaran langsung."
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 24
+        {
+            question: "Dari kegiatan berikut ini, manakah yang paling tepat menunjukkan kegiatan pembelajaran?",
+            options: [
+                /* A */ "Peserta didik hadir mendengarkan penjelasan pendidik di kelas.",
+                /* B */ "Pendidik membagikan buku paket kepada peserta didik.",
+                /* C */ "Peserta didik praktik mengamati sel hewan dan tumbuhan dalam kelompok.",
+                /* D */ "Pendidik menyajikan materi tentang proses terjadinya fotosintesis kepada peserta didik."
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 25
+        {
+            question: "Adit adalah seorang lulusan SMK Jurusan Akuntansi. Ia bekerja di sebuah toko online dan selalu berkomunikasi dengan mitra kerjanya di seluruh dunia melalui internet. Kecakapan yang dimiliki Adit termasuk dalam kecakapan",
+            options: [
+                /* A */ "Kreativitas dan inovasi",
+                /* B */ "Berkomunikasi dan berkolaborasi",
+                /* C */ "Memecahkan masalah",
+                /* D */ "Berpikir kritis"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 26
+        {
+            question: "Dosen memberikan dua pilihan strategi pembelajaran untuk materi Kewargaan Digital: \n1. Diskusi berbasis kasus nyata pelanggaran etika digital.\n2. Ceramah tradisional berbasis teori.\nJika tujuan pembelajaran adalah meningkatkan kesadaran dan keterampilan etis mahasiswa di ruang digital, keputusan terbaik adalah",
+            options: [
+                /* A */ "Memilih diskusi berbasis kasus karena mendorong partisipasi aktif dan refleksi kritis.",
+                /* B */ "Memilih ceramah tradisional karena dosen dapat mengontrol isi materi.",
+                /* C */ "Menggabungkan keduanya tanpa mempertimbangkan keterbatasan waktu perkuliahan.",
+                /* D */ "Menggunakan metode ceramah karena dianggap lebih cepat menyampaikan teori."
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 27
+        {
+            question: "Adriana senang belajar di perpustakaan sekolah karena ruangannya nyaman dan koleksi bukunya lengkap. Namun, ia terganggu oleh suara siswa lain. Bersama kelompoknya, Adriana membuat alat pendeteksi suara bising untuk diletakkan di perpustakaan. Kecakapan yang dimiliki kelompok Adriana termasuk dalam kecakapan",
+            options: [
+                /* A */ "Berkomunikasi dan berkolaborasi",
+                /* B */ "Kewargaan digital",
+                /* C */ "Berpikir kritis",
+                /* D */ "Kreativitas dan inovasi"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 28
+        {
+            question: "Seorang dosen memprogram LMS untuk memberikan umpan balik otomatis berupa \"Selamat! Jawaban Anda benar\" setiap kali mahasiswa berhasil menjawab soal latihan. Berdasarkan teori behavioristik, praktik ini bertujuan untuk",
+            options: [
+                /* A */ "Membantu mahasiswa mengembangkan metakognisi.",
+                /* B */ "Memperkuat respons yang benar melalui penguatan positif.",
+                /* C */ "Mendorong mahasiswa membangun makna personal.",
+                /* D */ "Memberikan kebebasan mahasiswa mengeksplorasi konsep secara mandiri."
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 29
+        {
+            question: "Berikut ini yang merupakan penjelasan belajar menurut teori behavioristik adalah ....",
+            options: [
+                /* A */ "Proses interaksional untuk memperoleh pemahaman baru.",
+                /* B */ "Proses belajar dari pengalaman langsung sebagai akibat tindakan seseorang.",
+                /* C */ "Perpindahan dari pengaruh lingkungan ke arah faktor manusia.",
+                /* D */ "Perubahan tingkah laku sebagai hasil interaksi antara stimulus dan respons."
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 30
+        {
+            question: "Berikut ini yang merupakan penjelasan belajar menurut teori behavioristik adalah ....",
+            options: [
+                /* A */ "Proses interaksional untuk memperoleh pemahaman baru.",
+                /* B */ "Perubahan tingkah laku sebagai hasil interaksi antara stimulus dan respons, menekankan hasil belajar (outcome) dan kurang memperhatikan proses.",
+                /* C */ "Belajar dari pengalaman langsung (enactive learning).",
+                /* D */ "Perpindahan dari pengaruh lingkungan ke arah faktor manusia."
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 31
+        {
+            question: "Di sebuah kelas, seorang pendidik memberikan pujian kepada peserta didik atas hasil karya atau keberaniannya mengemukakan pendapat. Jika pujian tidak diberikan, peserta didik tidak tertarik lagi untuk berkarya. Contoh tersebut merupakan teori behavioristik Skinner yaitu",
+            options: [
+                /* A */ "Negative reinforcement",
+                /* B */ "Positive reinforcement",
+                /* C */ "Law of effect",
+                /* D */ "Operant conditioning"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 32
+        {
+            question: "John Broadus Watson merupakan tokoh teori behavioristik. Pandangannya berfokus pada pentingnya ....",
+            options: [
+                /* A */ "kesehatan fisik individu sejak dalam kandungan",
+                /* B */ "motivasi intrinsik mahasiswa",
+                /* C */ "faktor lingkungan dalam proses belajar individu",
+                /* D */ "perubahan mental mahasiswa"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 33
+        {
+            question: "Menurut teori belajar Guthrie, hubungan antara stimulus dan respons terbentuk karena ...",
+            options: [
+                /* A */ "penguatan yang diberikan terus-menerus",
+                /* B */ "kedekatan waktu antara stimulus dan respons (contiguity)",
+                /* C */ "hukuman setelah respons salah",
+                /* D */ "motivasi internal individu"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 34
+        {
+            question: "Benny berlatih pukulan smash bulutangkis secara rutin sehingga keterampilannya semakin baik. Kegiatan tersebut merupakan penerapan teori Thorndike yaitu hukum",
+            options: [
+                /* A */ "Trial and error",
+                /* B */ "Law of effect",
+                /* C */ "Law of readiness",
+                /* D */ "Law of exercise"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 35
+        {
+            question: "Dalam pembelajaran seni tari, peserta didik yang siap mempelajari gerakan baru akan merasa puas, sedangkan yang belum siap akan merasa terpaksa. Hal ini sesuai dengan hukum belajar Thorndike, yaitu",
+            options: [
+                /* A */ "Trial and error",
+                /* B */ "Law of effect",
+                /* C */ "Law of readiness",
+                /* D */ "Law of exercise"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 36
+        {
+            question: "Mengapa hukum kesiapan penting dalam proses belajar mengajar?",
+            options: [
+                /* A */ "Karena memastikan adanya motivasi dan kesiapan akan membuat proses belajar lebih optimal.",
+                /* B */ "Karena dapat menggantikan peran stimulus dan respons.",
+                /* C */ "Karena menjadi satu-satunya faktor penentu hasil belajar.",
+                /* D */ "Karena lebih menekankan penghafalan materi."
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 37
+        {
+            question: "Jika seorang siswa memiliki kebiasaan berbicara di kelas, penerapan metode kelelahan menurut Guthrie adalah",
+            options: [
+                /* A */ "memberikan penghargaan ketika siswa berhasil diam",
+                /* B */ "memberikan hukuman agar siswa tidak mengulanginya",
+                /* C */ "mengganti kebiasaan berbicara dengan aktivitas mencatat",
+                /* D */ "meminta siswa berbicara terus-menerus hingga bosan dan berhenti"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 38
+        {
+            question: "Metode yang cocok digunakan untuk mengatasi peserta didik yang berbicara terus-menerus agar menjadi diam menurut Guthrie adalah metode",
+            options: [
+                /* A */ "respons bertentangan",
+                /* B */ "kelelahan",
+                /* C */ "ambang",
+                /* D */ "rewards"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 39
+        {
+            question: "Pak Irwan menyuruh Chiko yang suka berlari-lari di kelas untuk berlari di halaman sekolah sebelum pembelajaran dimulai. Tindakan tersebut merupakan penerapan teori Guthrie dengan metode",
+            options: [
+                /* A */ "respons bertentangan",
+                /* B */ "kelelahan",
+                /* C */ "ambang",
+                /* D */ "hukuman"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 40
+        {
+            question: "Dalam praktik pembelajaran, ciri penerapan behavioristik tampak ketika dosen",
+            options: [
+                /* A */ "mendorong mahasiswa menemukan konsep melalui diskusi reflektif",
+                /* B */ "meminta mahasiswa melakukan refleksi diri",
+                /* C */ "memberikan pujian setiap kali mahasiswa berhasil menjawab benar",
+                /* D */ "menekankan konstruksi makna pribadi"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 41
+        {
+            question: "Berikut ini ciri-ciri prinsip teori belajar behavioristik, kecuali ....",
+            options: [
+                /* A */ "Menekankan adanya asosiasi (connections) antara stimulus dan respons",
+                /* B */ "Penciptaan situasi belajar yang menyenangkan",
+                /* C */ "Pembelajaran dilakukan secara bertahap dari yang sederhana ke yang kompleks",
+                /* D */ "Belajar dari pengalaman langsung (enactive learning)"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 42
+        {
+            question: "Berikut ini yang merupakan penerapan prinsip teori belajar behavioristik adalah ....",
+            options: [
+                /* A */ "Menekankan pada perubahan sikap mental peserta didik",
+                /* B */ "Menciptakan situasi belajar yang kompetitif",
+                /* C */ "Menyusun pembelajaran dari yang mudah ke yang sukar",
+                /* D */ "Menciptakan interaksi sosial antar peserta didik"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 43
+        {
+            question: "Berikut ini yang merupakan konsep dari pembelajaran terprogram adalah ....",
+            options: [
+                /* A */ "Menuntut peserta didik untuk lebih banyak terlibat latihan (drill) dan mengikuti konsep operant conditioning serta pola stimulus-respons-penguatan",
+                /* B */ "Program didesain serba lengkap dan siap digunakan secara mandiri oleh peserta didik sesuai kemampuan masing-masing",
+                /* C */ "Memfokuskan pada tingkah laku yang tampak, dapat diamati, dan diukur",
+                /* D */ "Dapat digunakan untuk mengajarkan konsep baru kepada peserta didik"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 44
+        {
+            question: "Pembelajaran terprogram yang dikembangkan dari teori behavioristik menekankan pada",
+            options: [
+                /* A */ "Pemberian pengalaman belajar terbuka tanpa urutan yang jelas",
+                /* B */ "Penyajian materi secara sistematis dalam unit kecil yang disertai umpan balik segera",
+                /* C */ "Kemandirian penuh mahasiswa tanpa intervensi instruktur",
+                /* D */ "Pengalaman belajar berdasarkan refleksi diri mahasiswa"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 45
+        {
+            question: "Di Sekolah Dasar \"Alam Terkembang\", setiap peserta didik boleh menyelesaikan setiap unit pembelajaran sesuai dengan kecepatan belajar masing-masing. Setelah menyelesaikan satu unit, peserta didik dapat melanjutkan ke unit berikutnya tanpa menunggu teman yang lain. Konsep ini merupakan penerapan teori behavioristik dengan konsep belajar ....",
+            options: [
+                /* A */ "Terprogram",
+                /* B */ "Mandiri",
+                /* C */ "Tuntas",
+                /* D */ "Kolaborasi"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 46
+        {
+            question: "Dalam sebuah kelas, mahasiswa diminta mengerjakan soal latihan berulang-ulang hingga mampu menjawab benar tanpa kesalahan. Strategi ini sesuai dengan teori behavioristik karena",
+            options: [
+                /* A */ "Memberi kebebasan penuh bagi mahasiswa menentukan alur belajar",
+                /* B */ "Mendorong mahasiswa membangun pengetahuan baru secara mandiri",
+                /* C */ "Menekankan konstruksi makna pribadi melalui refleksi",
+                /* D */ "Mengandalkan pengulangan stimulus-respons untuk memperkuat kebiasaan"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 47
+        {
+            question: "Salah satu kesimpulan yang dapat diambil dari penerapan teori behavioristik dalam pembelajaran adalah",
+            options: [
+                /* A */ "Menggunakan ingatan dan proses berpikir untuk menyimpan pengetahuan dalam pikiran individu",
+                /* B */ "Menciptakan interaksi timbal balik antara individu dengan lingkungan",
+                /* C */ "Pembelajaran dibagi menjadi bagian-bagian kecil dan memberikan kesempatan yang sama kepada peserta didik untuk berpartisipasi aktif",
+                /* D */ "Meyakini bahwa peserta didik memiliki pengetahuan dasar dan keterampilan yang memungkinkan mereka mempelajari materi baru"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 48
+        {
+            question: "Kesimpulan yang dapat diambil bahwa pembelajaran dengan menggunakan teori behavioristik harus memperhatikan faktor eksternal (intelektual, sosial, maupun fisik) dilakukan dengan",
+            options: [
+                /* A */ "Memberikan penguatan (reinforcement) apabila peserta didik bertingkah laku sesuai harapan pendidik",
+                /* B */ "Mengakui dan menghargai kemajuan peserta didik serta tidak mengharapkan semua peserta didik belajar dengan kecepatan yang sama",
+                /* C */ "Membantu peserta didik dengan membagi materi ke dalam bagian-bagian kecil, memberi kesempatan berpartisipasi aktif, dan menyediakan ruang belajar yang aman dan nyaman",
+                /* D */ "Yakin bahwa peserta didik memiliki pengetahuan dasar dan keterampilan yang memungkinkan mereka mempelajari materi baru"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 49
+        {
+            question: "Teori kognitivistik menekankan pada ....",
+            options: [
+                /* A */ "Perubahan perilaku peserta didik",
+                /* B */ "Perkembangan fisik peserta didik",
+                /* C */ "Perkembangan jumlah pengetahuan peserta didik",
+                /* D */ "Proses mental peserta didik dalam belajar"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 50
+        {
+            question: "Dalam perspektif kognitivistik, kegagalan mahasiswa memahami materi dapat terjadi karena",
+            options: [
+                /* A */ "Proses pengolahan informasi tidak optimal di memori jangka pendek",
+                /* B */ "Tidak ada penguatan positif yang diberikan dosen",
+                /* C */ "Mahasiswa tidak diberi latihan pengulangan perilaku sebelumnya",
+                /* D */ "Mahasiswa kurang terpapar stimulus lingkungan sekitar"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 51
+        {
+            question: "Perilaku seseorang yang dipengaruhi oleh tingkat perkembangan mental dan pemahaman atas dirinya sendiri disebut dengan teori belajar ....",
+            options: [
+                /* A */ "Behavioristik",
+                /* B */ "Kognitivistik",
+                /* C */ "Sosial",
+                /* D */ "Konstruktivisme"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 52
+        {
+            question: "Seorang dosen ingin agar mahasiswa tidak hanya mengingat konsep teori komunikasi, tetapi juga mampu menggunakannya untuk menganalisis kasus nyata. Tujuan belajar ini sesuai perspektif kognitivistik karena menekankan",
+            options: [
+                /* A */ "Penciptaan kebiasaan melalui latihan berulang",
+                /* B */ "Transfer dan penerapan pengetahuan dalam situasi baru",
+                /* C */ "Pemberian reward agar mahasiswa lebih termotivasi",
+                /* D */ "Penguatan perilaku melalui konsekuensi positif"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 53
+        {
+            question: "Menurut teori belajar kognitivistik, yang dimaksud dengan belajar adalah proses",
+            options: [
+                /* A */ "Interaksional, peserta didik memperoleh pemahaman baru atau memperbarui pemahaman lama",
+                /* B */ "Pengenalan diri peserta didik dalam memperoleh pemahaman baru",
+                /* C */ "Perubahan sikap peserta didik dalam memperoleh pengetahuan baru",
+                /* D */ "Meningkatkan keterampilan sehingga memperoleh keterampilan baru"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 54
+        {
+            question: "Yang dimaksud belajar menurut teori belajar kognitivistik adalah",
+            options: [
+                /* A */ "Belajar merupakan proses interaksional ketika seseorang memperoleh pemahaman baru, membangun struktur kognitif, dan memperbarui pemahaman lama",
+                /* B */ "Belajar merupakan proses pengenalan diri untuk memperoleh pemahaman baru",
+                /* C */ "Belajar merupakan proses perubahan sikap untuk memperoleh sikap baru",
+                /* D */ "Belajar merupakan proses meningkatkan keterampilan"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 55
+        {
+            question: "Faktor-faktor yang mempengaruhi perkembangan kognitif menurut Jean Piaget adalah",
+            options: [
+                /* A */ "Persepsi, penyimpanan, dan perhatian",
+                /* B */ "Usia, jenis kelamin, dan kemampuan ekonomi",
+                /* C */ "Perkembangan biologis, lingkungan fisik, lingkungan sosial, dan ekuilibrasi",
+                /* D */ "Pekerjaan orang tua, sekolah, dan sarana belajar"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 56
+        {
+            question: "Seorang dosen memberikan tugas proyek kolaboratif agar mahasiswa saling berdiskusi. Faktor perkembangan kognitif yang ditekankan adalah ....",
+            options: [
+                /* A */ "Faktor kematangan biologis",
+                /* B */ "Faktor pengalaman individual",
+                /* C */ "Faktor lingkungan sosial",
+                /* D */ "Faktor penguatan eksternal"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 57
+        {
+            question: "Menurut Jean Piaget, faktor-faktor yang mempengaruhi perkembangan kognitif individu adalah",
+            options: [
+                /* A */ "Perhatian, persepsi, penyimpanan, dan pengolahan informasi",
+                /* B */ "Usia, jenis kelamin, dan kemampuan ekonomi",
+                /* C */ "Pekerjaan orang tua, sekolah, dan sarana belajar",
+                /* D */ "Perkembangan biologis, lingkungan fisik, lingkungan sosial, dan ekuilibrasi"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 58
+        {
+            question: "Seorang dosen meminta mahasiswa menganalisis dampak sosial dari penggunaan kecerdasan buatan (AI) dengan membuat hipotesis dan argumen. Aktivitas ini mencerminkan ciri",
+            options: [
+                /* A */ "Tahap praoperasional",
+                /* B */ "Tahap operasional konkret",
+                /* C */ "Tahap operasional formal",
+                /* D */ "Tahap sensorimotor"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 59
+        {
+            question: "Tahap perkembangan kognitif individu pada usia 7-9 tahun adalah tahap operasional konkret. Tahap ini ditandai dengan poin berikut, kecuali",
+            options: [
+                /* A */ "Berkembangnya kemampuan berpikir logis",
+                /* B */ "Mengenal objek di lingkungan terdekat",
+                /* C */ "Mulai dapat berpikir abstrak",
+                /* D */ "Mulai dapat berpikir konkret"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 60
+        {
+            question: "Urutan tahapan perkembangan kognitif menurut Jean Piaget yang benar adalah ...",
+            options: [
+                /* A */ "Praoperasional, sensorimotor, operasional konkret, operasional formal",
+                /* B */ "Sensorimotor, operasional konkret, praoperasional, operasional formal",
+                /* C */ "Sensorimotor, praoperasional, operasional formal, operasional konkret",
+                /* D */ "Sensorimotor, praoperasional, operasional konkret, operasional formal"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 61
+        {
+            question: "Salah satu strategi yang dapat dilakukan oleh pendidik untuk mendukung teori perkembangan kognitif adalah",
+            options: [
+                /* A */ "memperhatikan perkembangan fisik peserta didik",
+                /* B */ "menjelaskan tujuan sebelum memulai pembelajaran",
+                /* C */ "memberikan perhatian dalam pembelajaran",
+                /* D */ "menciptakan pembelajaran aktif"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 62
+        {
+            question: "Strategi yang dapat dilakukan oleh pendidik untuk menciptakan pembelajaran yang dapat memudahkan proses persepsi adalah",
+            options: [
+                /* A */ "memberikan contoh konkret dan menjelaskan tujuan sebelum memulai pembelajaran",
+                /* B */ "memberikan perhatian isyarat kepada peserta didik",
+                /* C */ "memberikan perhatian dalam pembelajaran",
+                /* D */ "memberikan materi prasyarat sebelum memulai pembelajaran"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 63
+        {
+            question: "Ferdy, seorang siswa PAUD, memperhatikan gambar harimau dan kucing yang ditampilkan guru melalui PowerPoint. Guru kemudian meminta Ferdy menunjuk gambar kucing. Aktivitas memperhatikan gambar tersebut merupakan",
+            options: [
+                /* A */ "input sensorik",
+                /* B */ "memori jangka pendek",
+                /* C */ "memori jangka panjang",
+                /* D */ "register sensorik"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 64
+        {
+            question: "Seorang dosen menampilkan gambar kompleks hanya beberapa detik, lalu meminta mahasiswa menjelaskan detail gambar tersebut. Aktivitas ini memanfaatkan fungsi ....",
+            options: [
+                /* A */ "memori jangka panjang",
+                /* B */ "memori kerja",
+                /* C */ "metakognisi",
+                /* D */ "register sensorik"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 65
+        {
+            question: "Memori kerja (working memory) yang berhubungan dengan kesadaran atau apa yang seseorang sadari pada saat tertentu termasuk pemrosesan informasi",
+            options: [
+                /* A */ "input sensorik",
+                /* B */ "register sensorik",
+                /* C */ "memori jangka pendek",
+                /* D */ "memori jangka panjang"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 66
+        {
+            question: "Artha sudah pernah belajar mengenai sistem pencernaan manusia. Saat ini Artha belajar tentang peran usus besar dalam pengolahan makanan dan mengaitkannya dengan materi yang pernah dipelajari. Aktivitas tersebut merupakan proses",
+            options: [
+                /* A */ "perhatian",
+                /* B */ "pengkodean informasi",
+                /* C */ "persepsi",
+                /* D */ "pemanggilan kembali informasi"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 67
+        {
+            question: "Seorang dosen meminta mahasiswa membuat peta konsep untuk menghubungkan teori belajar dengan contoh penerapannya. Strategi ini mendukung pengkodean karena",
+            options: [
+                /* A */ "membantu mahasiswa mengorganisasi informasi menjadi struktur yang bermakna",
+                /* B */ "membatasi informasi agar sesuai kapasitas memori sensorik",
+                /* C */ "memberi hukuman agar mahasiswa tidak salah menghafal",
+                /* D */ "mengulang informasi sampai tersimpan otomatis dalam memori jangka panjang"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 68
+        {
+            question: "Proses memasukkan informasi baru ke sistem pemrosesan informasi dan menyiapkannya untuk disimpan dalam memori jangka panjang disebut",
+            options: [
+                /* A */ "pengkodean",
+                /* B */ "perhatian",
+                /* C */ "persepsi",
+                /* D */ "penyimpanan"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 69
+        {
+            question: "Mengapa keterampilan intelektual penting dalam pembelajaran menurut Gagné?",
+            options: [
+                /* A */ "Karena membantu mahasiswa menghafal lebih cepat",
+                /* B */ "Karena memungkinkan mahasiswa mengorganisasi, mengklasifikasi, dan menggunakan konsep secara tepat",
+                /* C */ "Karena membuat mahasiswa lebih termotivasi oleh hadiah eksternal",
+                /* D */ "Karena menjamin mahasiswa memiliki sikap positif terhadap pembelajaran"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 70
+        {
+            question: "Nathan berlatih secara rutin memasukkan bola ke dalam ring basket. Aktivitas tersebut termasuk dalam ragam belajar",
+            options: [
+                /* A */ "informasi verbal",
+                /* B */ "keterampilan intelektual",
+                /* C */ "keterampilan motorik",
+                /* D */ "strategi kognitif"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 71
+        {
+            question: "Kemampuan untuk membedakan, mengkombinasikan, mengorganisasikan, mengklasifikasikan, menganalisis, dan mengukur objek termasuk dalam ragam belajar ....",
+            options: [
+                /* A */ "informasi verbal",
+                /* B */ "keterampilan intelektual",
+                /* C */ "strategi kognitif",
+                /* D */ "keterampilan motorik"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 72
+        {
+            question: "Sebelum menjelaskan materi baru, dosen meminta mahasiswa mengingat kembali pengalaman belajar sebelumnya yang relevan. Hal ini sesuai dengan peristiwa pembelajaran",
+            options: [
+                /* A */ "memberikan bimbingan belajar",
+                /* B */ "menyajikan stimulus",
+                /* C */ "merangsang ingatan terhadap prasyarat belajar",
+                /* D */ "memberikan umpan balik"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 73
+        {
+            question: "Siswa kelas VII sedang melakukan praktik mencangkok pohon alpukat secara berkelompok. Guru berkeliling memeriksa hasil kerja siswa dan memberikan masukan. Aktivitas guru tersebut termasuk peristiwa pembelajaran",
+            options: [
+                /* A */ "memberikan bimbingan belajar",
+                /* B */ "mengingat kembali konsep dan prinsip",
+                /* C */ "menyampaikan materi pembelajaran",
+                /* D */ "menimbulkan minat dan menarik perhatian"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 74
+        {
+            question: "Untuk memastikan peserta didik siap belajar dan berpartisipasi, pendidik perlu menyajikan stimulus atau rangsangan untuk menarik perhatian peserta didik. Hal ini termasuk peristiwa pembelajaran",
+            options: [
+                /* A */ "menginformasikan tujuan pembelajaran",
+                /* B */ "mengingat kembali konsep dan prinsip",
+                /* C */ "menyampaikan materi pembelajaran",
+                /* D */ "menimbulkan minat dan menarik perhatian"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 75
+        {
+            question: "Menurut teori belajar sosial, belajar pada manusia terutama terjadi melalui ....",
+            options: [
+                /* A */ "observasi terhadap perilaku orang lain dalam lingkungan sosial",
+                /* B */ "proses stimulus-respons yang berulang tanpa keterlibatan orang lain",
+                /* C */ "pembentukan kebiasaan melalui penguatan positif dan negatif",
+                /* D */ "proses otomatis penyimpanan informasi dalam memori jangka panjang"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 76
+        {
+            question: "Bu Septi mengajak siswa kelas VI melakukan observasi aktivitas ekonomi di lingkungan rumah mereka dan melakukan wawancara kepada pemilik usaha. Aktivitas tersebut menunjukkan konsep dasar teori belajar sosial, yaitu belajar",
+            options: [
+                /* A */ "melalui percobaan",
+                /* B */ "dengan mengembangkan kepribadian",
+                /* C */ "terjadi di lingkungan sosial",
+                /* D */ "dilakukan di mana pun"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 77
+        {
+            question: "Seseorang bertindak berdasarkan standar internal dan penilaiannya sendiri terhadap tindakannya. Pendapat ini didasarkan pada teori belajar",
+            options: [
+                /* A */ "belajar sosial berpijak dari teori behavioristik",
+                /* B */ "belajar pada manusia terjadi di lingkungan sosial",
+                /* C */ "belajar melalui pengamatan",
+                /* D */ "belajar sosial dan pengembangan pribadi"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 78
+        {
+            question: "Pengaturan diri meliputi tiga tahap, yaitu pemikiran sebelumnya, mengontrol kinerja, dan refleksi diri. Pendapat ini dikemukakan oleh",
+            options: [
+                /* A */ "Zimmerman (1988, 2000)",
+                /* B */ "Tolman dan Honzik (1930)",
+                /* C */ "Carl Rogers (1902-1987)",
+                /* D */ "Norman (1976)"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 79
+        {
+            question: "Seorang siswa meniru cara gurunya mengucapkan kata-kata bahasa Inggris dengan baik setelah melihat contoh di kelas. Proses ini menunjukkan ....",
+            options: [
+                /* A */ "belajar melalui pengalaman langsung",
+                /* B */ "belajar melalui penguatan eksternal",
+                /* C */ "belajar dari orang lain (observational learning)",
+                /* D */ "belajar melalui classical conditioning"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 80
+        {
+            question: "Untuk belajar membuat kolam ikan air tawar, Pak Reza mengajak pemilik usaha pemancingan untuk membimbing siswa. Dalam teori belajar sosial, upaya tersebut merupakan penerapan prinsip",
+            options: [
+                /* A */ "Tut Wuri Handayani",
+                /* B */ "belajar sepanjang hayat",
+                /* C */ "belajar dari orang lain",
+                /* D */ "pemanfaatan sumber belajar"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 81
+        {
+            question: "Seorang dosen memperagakan cara menggunakan alat peraga dalam pembelajaran IPA. Mahasiswa mengamati dan kemudian mempraktikkannya sendiri. Menurut teori Bandura, mahasiswa telah melalui tahapan",
+            options: [
+                /* A */ "Perhatian → Retensi",
+                /* B */ "Retensi → Motivasi Reproduksi motorik → Motivasi Pengulangan → Respons",
+                /* C */ "Perhatian Hukuman → Penguatan → Pengulangan",
+                /* D */ "Retensi → Refleksi Reaksi → Respons kognitif"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 82
+        {
+            question: "Berikut ini yang tidak termasuk dalam fungsi modeling adalah",
+            options: [
+                /* A */ "Larangan",
+                /* B */ "Fasilitasi respons",
+                /* C */ "Pengembangan ide",
+                /* D */ "Belajar melalui pengamatan"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 83
+        {
+            question: "Berikut ini adalah fungsi-fungsi pemodelan dari Teori Belajar Sosial Albert Bandura, kecuali",
+            options: [
+                /* A */ "Pemberian hadiah dan hukuman",
+                /* B */ "Belajar melalui pengamatan",
+                /* C */ "Fasilitasi respons",
+                /* D */ "Larangan"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 84
+        {
+            question: "Diberikan contoh kasus di sekolah masa pandemi Covid-19, mahasiswa mampu memberikan pertimbangan ide usaha kepada kepala sekolah dalam perspektif mewujudkan sekolah efektif. Tujuan capaian pembelajaran ini masuk dalam kawasan ....",
+            options: [
+                /* A */ "Psikomotorik",
+                /* B */ "Kognitif",
+                /* C */ "Afektif",
+                /* D */ "Efektif"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 85
+        {
+            question: "Dalam konteks pembelajaran humanistik, kawasan afektif lebih menekankan pada kemampuan mahasiswa untuk",
+            options: [
+                /* A */ "Menghafal dan mengingat informasi dengan akurat",
+                /* B */ "Mengorganisasi dan menilai nilai-nilai yang memengaruhi sikap dan perilaku belajar",
+                /* C */ "Menunjukkan kemampuan berpikir kritis dan pemecahan masalah",
+                /* D */ "Mengembangkan keterampilan motorik dalam menggunakan alat pembelajaran"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 86
+        {
+            question: "Diberikan contoh kasus perundungan (bullying) di sekolah, siswa mampu menunjukkan perilaku menolak perundungan. Capaian pembelajaran ini masuk dalam kawasan ....",
+            options: [
+                /* A */ "Psikomotorik",
+                /* B */ "Kognitif",
+                /* C */ "Afektif",
+                /* D */ "Efektif"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 87
+        {
+            question: "Peserta didik kelas VIII menghadapi kejadian korsleting listrik di sekolah. Mereka tidak dapat menjelaskan mengapa peristiwa itu terjadi. Berdasarkan teori David Kolb, kondisi peserta didik ini masuk pada tahap ....",
+            options: [
+                /* A */ "Pengamatan reflektif",
+                /* B */ "Pengalaman konkret",
+                /* C */ "Eksperimentasi aktif",
+                /* D */ "Konseptualisasi abstrak"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 88
+        {
+            question: "Dalam pelajaran Fisika, peserta didik mampu memahami asal-usul sebuah rumus dan menerapkannya untuk memecahkan masalah. Berdasarkan teori David Kolb, kondisi peserta didik tersebut sudah masuk pada tahap",
+            options: [
+                /* A */ "Pengamatan reflektif",
+                /* B */ "Pengalaman konkret",
+                /* C */ "Eksperimentasi aktif",
+                /* D */ "Konseptualisasi abstrak"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 89
+        {
+            question: "Dosen meminta mahasiswa menganalisis pengalaman kerja lapangan mereka, mendiskusikan apa yang berhasil dan tidak berhasil, lalu menyimpulkan pelajaran dari pengalaman tersebut. Aktivitas ini mencerminkan tahap ....",
+            options: [
+                /* A */ "Eksperimentasi aktif",
+                /* B */ "Pengalaman konkret",
+                /* C */ "Pengamatan reflektif",
+                /* D */ "Konseptualisasi abstrak"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 90
+        {
+            question: "Sonny senang bermain musik, tetapi tidak bersemangat ketika guru hanya menjelaskan teori alat musik tanpa praktik. Sonny termasuk peserta didik tipe",
+            options: [
+                /* A */ "Pragmatis",
+                /* B */ "Reflektor",
+                /* C */ "Aktivis",
+                /* D */ "Teoris"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 91
+        {
+            question: "Peserta didik yang menyukai metode yang mendorong menemukan sesuatu yang baru, berpikiran terbuka, dan senang berdiskusi termasuk tipe ....",
+            options: [
+                /* A */ "Teoris",
+                /* B */ "Reflektor",
+                /* C */ "Aktivis",
+                /* D */ "Pragmatis"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 92
+        {
+            question: "Peserta didik tipe aktivis menurut Honey dan Mumford cenderung belajar dengan cara ....",
+            options: [
+                /* A */ "Mengamati terlebih dahulu sebelum mencoba sesuatu",
+                /* B */ "Terlibat langsung dalam pengalaman baru dan menyukai tantangan praktis",
+                /* C */ "Menyusun rencana belajar secara hati-hati sebelum bertindak",
+                /* D */ "Merefleksikan pengalaman lama untuk menemukan pola berpikir baru"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 93
+        {
+            question: "Dalam konteks pembelajaran, contoh penerapan belajar emansipatoris adalah ketika mahasiswa",
+            options: [
+                /* A */ "Menyelesaikan latihan soal secara berulang sampai mahir",
+                /* B */ "Menghafal teori tanpa mempertanyakan konteks penerapannya",
+                /* C */ "Mengkritisi kebijakan pendidikan yang tidak adil dan mengusulkan solusi",
+                /* D */ "Mengamati praktik dosen tanpa memberikan umpan balik"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 94
+        {
+            question: "Berdasarkan domain pengetahuan menurut Habermas, relasi antara manusia, masyarakat, dan budaya termasuk kategori pengetahuan ....",
+            options: [
+                /* A */ "Teknis",
+                /* B */ "Praktis",
+                /* C */ "Empiris",
+                /* D */ "Emansipatoris"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 95
+        {
+            question: "Gunawan sangat senang bertualang dan menjelajah berbagai tempat yang dianggap menarik. Gunawan termasuk kategori belajar tipe ....",
+            options: [
+                /* A */ "Teknis",
+                /* B */ "Praktis",
+                /* C */ "Empiris",
+                /* D */ "Emansipatoris"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 96
+        {
+            question: "Rania sangat senang menolong teman-temannya sehingga disukai oleh teman sekelasnya. Dalam teori Maslow, perilaku Rania menunjukkan kebutuhan",
+            options: [
+                /* A */ "Fisiologis",
+                /* B */ "Aktualisasi diri",
+                /* C */ "Rasa aman",
+                /* D */ "Sosial"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 97
+        {
+            question: "Menurut Maslow, kebutuhan aktualisasi diri muncul ketika individu",
+            options: [
+                /* A */ "Berusaha memperoleh rasa aman dari lingkungan",
+                /* B */ "Memprioritaskan kebutuhan fisiologis",
+                /* C */ "Telah memenuhi kebutuhan dasar dan ingin mengembangkan potensi tertingginya",
+                /* D */ "Ingin diterima dan disukai kelompoknya"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 98
+        {
+            question: "Mahasiswa bergabung dalam WhatsApp Group agar dapat berkomunikasi dan belajar bersama teman-temannya. Menurut Maslow, hal ini termasuk kebutuhan",
+            options: [
+                /* A */ "Sosial",
+                /* B */ "Fisiologis",
+                /* C */ "Aktualisasi diri",
+                /* D */ "Rasa aman"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 99
+        {
+            question: "Dalam pandangan Rogers, hubungan antara belajar dan perubahan ditentukan oleh ....",
+            options: [
+                /* A */ "Seberapa banyak peserta didik mampu meniru perilaku guru",
+                /* B */ "Keterlibatan pribadi peserta didik dalam proses pembelajaran",
+                /* C */ "Seberapa banyak materi yang dapat diingat untuk ujian",
+                /* D */ "Kedisiplinan peserta didik dalam mengikuti aturan belajar"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 100
+        {
+            question: "Salah satu konsep penting yang dikemukakan oleh Vygotsky dalam proses belajar peserta didik adalah scaffolding, yang berarti bahwa",
+            options: [
+                /* A */ "Kesiapan individu untuk belajar sangat bergantung pada stimulus lingkungan",
+                /* B */ "Bantuan belajar diberikan secara bertahap sesuai perkembangan peserta didik",
+                /* C */ "Peserta didik mengkonstruksikan ilmu berdasarkan kematangan intelektualnya",
+                /* D */ "Struktur perkembangan kognitif peserta didik melalui asimilasi, akomodasi, dan ekuilibrasi"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 101
+        {
+            question: "Prinsip utama teori konstruktivisme sosial Vygotsky menekankan bahwa ....",
+            options: [
+                /* A */ "belajar bersifat individual dan bebas konteks",
+                /* B */ "semua siswa harus belajar dengan cara yang sama",
+                /* C */ "pengetahuan dibangun melalui interaksi sosial dan budaya",
+                /* D */ "pembelajaran terbaik terjadi tanpa bimbingan guru"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 102
+        {
+            question: "Asumsi para ahli konstruktivisme memandang peran guru sebagai ....",
+            options: [
+                /* A */ "penentu satu jawaban yang benar",
+                /* B */ "pemberi informasi utama dalam proses belajar",
+                /* C */ "pengendali penuh kegiatan kelas bersama peserta didik",
+                /* D */ "fasilitator yang membantu siswa membangun makna"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 103
+        {
+            question: "Salah satu asumsi dasar tentang bagaimana belajar terjadi menurut teori konstruktivisme adalah karena peserta didik ....",
+            options: [
+                /* A */ "sangat dipengaruhi oleh lingkungan tempat ia berada",
+                /* B */ "telah mendapatkan pengetahuan dari pendidik",
+                /* C */ "harus memahami apa yang telah diajarkan",
+                /* D */ "aktif mengembangkan pengetahuannya sendiri"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 104
+        {
+            question: "Asumsi dasar yang melandasi teori konstruktivistik tentang bagaimana belajar terjadi adalah",
+            options: [
+                /* A */ "peserta didik aktif mengembangkan pengetahuannya sendiri",
+                /* B */ "proses berpikir peserta didik sangat dipengaruhi oleh lingkungan",
+                /* C */ "pendidik menyampaikan pengetahuan kepada peserta didik",
+                /* D */ "peserta didik harus memahami apa yang telah diajarkan"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 105
+        {
+            question: "Di kelas IV SD, Erika membeli 7 kue dengan harga masing-masing Rp3.000,00 dan dapat menghitung sendiri jumlah yang harus dibayarkan. Menurut teori konstruktivisme, proses belajar seperti ini termasuk pembentukan pengetahuan pada tahap",
+            options: [
+                /* A */ "restrukturisasi ide",
+                /* B */ "elisitasi",
+                /* C */ "penggunaan ide",
+                /* D */ "orientasi"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 106
+        {
+            question: "Mahasiswa yang memperbaiki pemahamannya setelah menemukan hasil eksperimen yang berbeda sedang melakukan",
+            options: [
+                /* A */ "rekonstruksi ide",
+                /* B */ "reproduksi data",
+                /* C */ "penguatan kebiasaan",
+                /* D */ "transfer hafalan"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 107
+        {
+            question: "Dalam pembelajaran, peserta didik diberikan kesempatan mengembangkan motivasi dengan melakukan observasi terhadap topik yang akan dipelajari. Menurut teori konstruktivistik, pengalaman belajar ini termasuk tahap",
+            options: [
+                /* A */ "restrukturisasi ide",
+                /* B */ "elisitasi",
+                /* C */ "penggunaan ide",
+                /* D */ "orientasi"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 108
+        {
+            question: "Diana sangat senang menjahit dan belajar menjahit secara otodidak melalui YouTube. Menurut teori Carl Rogers, perilaku Diana termasuk kategori proses belajar humanistik yaitu belajar",
+            options: [
+                /* A */ "bermakna",
+                /* B */ "tanpa hukuman",
+                /* C */ "sepanjang hayat",
+                /* D */ "dengan inisiatif sendiri"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 109
+        {
+            question: "Contoh penerapan metode penyelidikan (inquiry) dalam pembelajaran Teknologi Pendidikan adalah ketika mahasiswa",
+            options: [
+                /* A */ "mencatat isi kuliah untuk dihafalkan",
+                /* B */ "menonton video pembelajaran tanpa diskusi",
+                /* C */ "meneliti efektivitas media pembelajaran melalui eksperimen sederhana",
+                /* D */ "mencari bahan tugas dari buku materi pokok"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 110
+        {
+            question: "Metode pembelajaran untuk mendorong, membimbing, dan mengukur sejauh mana peserta didik mengenali konsep-konsep pada topik yang dipelajari adalah ....",
+            options: [
+                /* A */ "metode inquiry (penyelidikan)",
+                /* B */ "demonstrasi atau peragaan",
+                /* C */ "diskusi dan presentasi",
+                /* D */ "tanya jawab (questioning)"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 111
+        {
+            question: "Mengapa penerapan pendekatan konstruktivisme sulit dilakukan di kelas besar?",
+            options: [
+                /* A */ "siswa cenderung pasif dan enggan berinteraksi",
+                /* B */ "siswa tidak suka bekerja sama dalam kelompok",
+                /* C */ "metode ini tidak melibatkan guru sama sekali",
+                /* D */ "setiap siswa memerlukan bimbingan dan umpan balik individual"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 112
+        {
+            question: "Salah satu keterbatasan penerapan teori belajar konstruktivisme adalah",
+            options: [
+                /* A */ "memerlukan waktu yang lama untuk belajar",
+                /* B */ "memerlukan sarana dan prasarana yang lengkap",
+                /* C */ "pendidik harus selalu siap membantu peserta didik",
+                /* D */ "hasil konstruksi pengetahuan peserta didik berpotensi tidak sesuai dengan kaidah ilmu"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 113
+        {
+            question: "Menurut teori belajar konstruktivisme, peran pendidik yang paling tepat adalah",
+            options: [
+                /* A */ "menyediakan berbagai kegiatan yang merangsang rasa ingin tahu peserta didik dan membantu mereka mengekspresikan gagasannya",
+                /* B */ "selalu memberikan motivasi agar peserta didik aktif dan kreatif",
+                /* C */ "merencanakan pengalaman belajar yang menyenangkan",
+                /* D */ "menyediakan berbagai pengalaman belajar yang harus diikuti peserta didik secara disiplin"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 114
+        {
+            question: "Contoh penerapan perspektif endogenous dalam pembelajaran adalah",
+            options: [
+                /* A */ "mahasiswa merefleksikan pengalaman belajar untuk memperbaiki pemahaman konsep",
+                /* B */ "mahasiswa meniru cara penyelesaian tugas dari temannya",
+                /* C */ "dosen memberi contoh langkah-langkah yang harus diikuti",
+                /* D */ "mahasiswa menghafal penjelasan dosen"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 115
+        {
+            question: "Perspektif exogenous dalam teori konstruktivisme berpandangan bahwa",
+            options: [
+                /* A */ "pengetahuan berasal dari interaksi antara seseorang dengan lingkungannya",
+                /* B */ "pengetahuan berasal dari pengetahuan sebelumnya yang telah dimiliki peserta didik",
+                /* C */ "pengetahuan dikembangkan melalui abstraksi pemahaman kognitif",
+                /* D */ "pengetahuan merupakan hasil rekonstruksi dunia luar"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 116
+        {
+            question: "Perspektif dialektikal dalam teori konstruktivisme memfokuskan belajar sebagai proses pemerolehan pengetahuan melalui",
+            options: [
+                /* A */ "interaksi peserta didik dengan lingkungannya",
+                /* B */ "abstraksi pemahaman kognitif peserta didik",
+                /* C */ "proses peserta didik merekonstruksi dunia luar",
+                /* D */ "pengetahuan sebelumnya yang dimiliki peserta didik"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 117
+        {
+            question: "Selain sebagai tokoh teori perkembangan kognitif, Jean Piaget juga merupakan penggagas teori konstruktivisme. Berikut ini pandangannya tentang belajar, kecuali",
+            options: [
+                /* A */ "kesiapan individu untuk belajar sangat bergantung pada stimulus lingkungan dan bimbingan dari orang lain yang kompeten",
+                /* B */ "pengetahuan dibangun melalui interaksi aktif fisik dan mental terhadap pengalaman",
+                /* C */ "perkembangan kognitif anak memungkinkan mereka mengonstruksi pengetahuan secara berbeda sesuai kematangan intelektual",
+                /* D */ "struktur perkembangan kognitif anak melalui proses asimilasi, akomodasi, dan ekuilibrasi"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 118
+        {
+            question: "Salah satu konsep penting yang dikemukakan oleh Vygotsky dalam proses belajar peserta didik adalah scaffolding, yang berarti bahwa",
+            options: [
+                /* A */ "kesiapan belajar bergantung pada stimulus lingkungan",
+                /* B */ "bantuan belajar diberikan secara bertahap sesuai perkembangan peserta didik",
+                /* C */ "peserta didik membangun ilmu sesuai kematangan intelektualnya",
+                /* D */ "perkembangan kognitif melalui asimilasi, akomodasi, dan ekuilibrasi"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 119
+        {
+            question: "Berikut ini yang bukan contoh penerapan model pembelajaran eksperiensial (experiential learning) di kelas adalah",
+            options: [
+                /* A */ "mahasiswa mengamati fenomena lalu mendiskusikan maknanya",
+                /* B */ "mahasiswa membuat proyek dan merefleksikan hasilnya",
+                /* C */ "mahasiswa mempraktikkan teori dalam situasi nyata",
+                /* D */ "mahasiswa mencatat kuliah tanpa interaksi"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 120
+        {
+            question: "Berikut ini merupakan kontribusi teori belajar behaviorisme dalam pembelajaran masa kini, kecuali",
+            options: [
+                /* A */ "pembelajaran berbantuan komputer",
+                /* B */ "tutorial terprogram",
+                /* C */ "pembelajaran langsung",
+                /* D */ "pembelajaran konsep"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 121
+        {
+            question: "Berikut ini manakah yang merupakan kontribusi teori belajar kognitivisme dalam pembelajaran masa kini?",
+            options: [
+                /* A */ "Belajar dari orang lain",
+                /* B */ "Pembelajaran konsep",
+                /* C */ "Program magang di tempat kerja",
+                /* D */ "Pembelajaran berbantuan komputer"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 122
+        {
+            question: "Prinsip utama dalam Personalized System of Instruction (PSI) menurut Keller (1968) adalah",
+            options: [
+                /* A */ "Dosen menjadi sumber utama pengetahuan dan mahasiswa hanya belajar dari dosen",
+                /* B */ "Semua mahasiswa mengikuti jadwal yang sama",
+                /* C */ "Setiap mahasiswa belajar sesuai dengan kecepatan dan kemampuannya sendiri",
+                /* D */ "Evaluasi dilakukan hanya pada akhir semester"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 123
+        {
+            question: "Dalam penerapan teori konstruktivisme dengan metode ilmiah, salah satu contoh cara peserta didik mengkomunikasikan pengetahuannya adalah dengan",
+            options: [
+                /* A */ "Mengumpulkan informasi dari sumbernya",
+                /* B */ "Membuat poster dari hasil observasi",
+                /* C */ "Mengamati alam lingkungan sekitar",
+                /* D */ "Mengolah informasi menjadi data"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 124
+        {
+            question: "Metode pengumpulan data untuk memenuhi rasa ingin tahu peserta didik dan menemukan fakta adanya hubungan antara objek sehingga proses pembelajaran menjadi lebih bermakna dilakukan dengan cara",
+            options: [
+                /* A */ "Mengumpulkan informasi",
+                /* B */ "Bertanya",
+                /* C */ "Mengamati",
+                /* D */ "Mengasosiasikan/mengolah informasi"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 125
+        {
+            question: "Contoh kegiatan yang mencerminkan tahap mengasosiasikan adalah ....",
+            options: [
+                /* A */ "Mahasiswa menunggu arahan dari dosen dan bertanya kepada dosen",
+                /* B */ "Mahasiswa menyalin teori dari buku teks untuk mengerjakan tugas analisis",
+                /* C */ "Mahasiswa mengamati fenomena alam dan mencatat hasil pengamatan pada lembar observasi",
+                /* D */ "Mahasiswa membandingkan hasil dua eksperimen untuk mencari persamaan dan perbedaan"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 126
+        {
+            question: "Fokus evaluasi dalam pendekatan konstruktivisme adalah",
+            options: [
+                /* A */ "Kemampuan siswa dalam mencapai tujuan pembelajaran yang dirumuskan",
+                /* B */ "Unjuk kemampuan kognitif, psikomotor, dan afektif",
+                /* C */ "Nilai prestasi yang tinggi",
+                /* D */ "Jenis instrumen atau tes yang digunakan dalam evaluasi"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 127
+        {
+            question: "Dampak penerapan konstruktivisme terhadap desain sumber belajar digital adalah",
+            options: [
+                /* A */ "Sumber belajar harus memungkinkan eksplorasi dan umpan balik dinamis",
+                /* B */ "Sumber belajar dibuat hanya untuk penyampaian konten dan video",
+                /* C */ "Penggunaan teknologi dianggap tidak penting, cukup media cetak saja",
+                /* D */ "Sumber belajar cukup berupa teks tertulis tanpa multimedia"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 128
+        {
+            question: "Salah satu dampak dari penerapan teori konstruktivisme terhadap evaluasi hasil belajar adalah digunakannya instrumen evaluasi autentik berupa",
+            options: [
+                /* A */ "Tes pilihan ganda",
+                /* B */ "Unjuk kerja",
+                /* C */ "Tes uraian",
+                /* D */ "Wawancara"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 129
+        {
+            question: "Ciri utama model Problem-Based Learning adalah",
+            options: [
+                /* A */ "Guru menyampaikan teori terlebih dahulu sebelum memberi tugas",
+                /* B */ "Pembelajaran dimulai dari permasalahan nyata yang relevan dengan kehidupan",
+                /* C */ "Siswa berlatih menghafal rumus untuk ujian",
+                /* D */ "Pembelajaran berfokus pada penjelasan guru"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 130
+        {
+            question: "Pembelajaran berbasis masalah dapat dilakukan dengan salah satu cara, yaitu",
+            options: [
+                /* A */ "Menyiapkan pertanyaan-pertanyaan untuk diskusi kelas",
+                /* B */ "Memberikan tugas kepada peserta didik untuk dikerjakan di kelas",
+                /* C */ "Melibatkan peserta didik dengan masalah langsung pada lingkungannya",
+                /* D */ "Mengembangkan program komputer untuk memfasilitasi belajar peserta didik"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 131
+        {
+            question: "Meskipun e-learning menyediakan akses bagi peserta didik ke berbagai sumber, yang perlu lebih diperhatikan oleh pendidik adalah",
+            options: [
+                /* A */ "Apakah peserta didik memperoleh keterampilan baru",
+                /* B */ "Apakah peserta didik mendapatkan teman baru",
+                /* C */ "Apakah peserta didik memperoleh sumber belajar baru",
+                /* D */ "Apakah peserta didik mendapat masalah baru"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 132
+        {
+            question: "Kegiatan yang penting dilakukan dalam pembelajaran dengan bantuan teman sebaya (peer-assisted learning) adalah",
+            options: [
+                /* A */ "Pendidik mengajukan pertanyaan kepada peserta didik",
+                /* B */ "Pembimbingan dilakukan kepada sesama teman",
+                /* C */ "Teman sebaya membuatkan tugas temannya",
+                /* D */ "Tutor sebaya adalah pengganti pendidik di kelas"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 133
+        {
+            question: "Beberapa hasil penelitian menunjukkan bahwa pembelajaran dengan bantuan teman sebaya paling efektif untuk peserta didik dengan ciri-ciri berikut, kecuali ...",
+            options: [
+                /* A */ "Tempat tinggal di perkotaan",
+                /* B */ "Dari keluarga berpenghasilan rendah",
+                /* C */ "Anak-anak minoritas",
+                /* D */ "Berusia remaja"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 134
+        {
+            question: "Salah satu contoh kegiatan yang penting dilakukan pendidik dalam model pembelajaran discovery learning adalah",
+            options: [
+                /* A */ "Mengumpulkan informasi",
+                /* B */ "Memberikan masalah",
+                /* C */ "Merumuskan aturan",
+                /* D */ "Merumuskan tujuan pembelajaran"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 135
+        {
+            question: "Berikut ini merupakan contoh penerapan Collaborative Learning, yaitu ....",
+            options: [
+                /* A */ "Mahasiswa mendengarkan dosen memberikan kuliah umum di auditorium",
+                /* B */ "Mahasiswa mengerjakan tugas secara individu tanpa diskusi",
+                /* C */ "Mahasiswa berdiskusi dalam kelompok kecil untuk menyelesaikan studi kasus",
+                /* D */ "Mahasiswa berdiskusi mengenai topik yang sedang trending"
+            ],
+            correctAnswer: "C"
+        },
+        // Soal 136
+        {
+            question: "Dalam pembelajaran sains, kegiatan yang mencerminkan Discovery Learning adalah",
+            options: [
+                /* A */ "Guru mendemonstrasikan eksperimen dan siswa hanya menonton",
+                /* B */ "Guru menjelaskan teori Archimedes secara detail sejak awal pembelajaran",
+                /* C */ "Siswa menghafal rumus fisika dari buku",
+                /* D */ "Siswa menemukan sendiri prinsip daya apung setelah melakukan percobaan sederhana"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 137
+        {
+            question: "Peserta didik belajar pengetahuan baru yang relevan dengan menerapkan pemecahan masalah secara umum seperti berikut ini, kecuali",
+            options: [
+                /* A */ "Menguji hipotesis",
+                /* B */ "Melaporkan hasil",
+                /* C */ "Mengumpulkan informasi",
+                /* D */ "Merumuskan aturan"
+            ],
+            correctAnswer: "D"
+        },
+        // Soal 138
+        {
+            question: "Salah satu asumsi dasar dalam teori belajar sosial humanistik dalam pembelajaran adalah pentingnya faktor",
+            options: [
+                /* A */ "Kesadaran diri sendiri",
+                /* B */ "Kreativitas",
+                /* C */ "Pemrosesan informasi",
+                /* D */ "Stimulus-respon"
+            ],
+            correctAnswer: "A"
+        },
+        // Soal 139
+        {
+            question: "Menurut teori humanistik, tujuan utama pembelajaran adalah membantu peserta didik untuk",
+            options: [
+                /* A */ "Menguasai seluruh materi pelajaran secara sempurna",
+                /* B */ "Mencapai perkembangan diri secara optimal dan aktualisasi diri",
+                /* C */ "Menghafal konsep-konsep yang diberikan guru",
+                /* D */ "Mendapatkan nilai yang tinggi pada setiap ujian"
+            ],
+            correctAnswer: "B"
+        },
+        // Soal 140
+        {
+            question: "Dalam teori humanistik, peran guru yang paling tepat adalah sebagai",
+            options: [
+                /* A */ "Sumber utama pengetahuan",
+                /* B */ "Pengontrol seluruh kegiatan belajar siswa",
+                /* C */ "Fasilitator yang membantu peserta didik mengembangkan potensinya",
+                /* D */ "Pemberi hukuman agar peserta didik disiplin"
+            ],
+            correctAnswer: "C"
+        }
     ];
 
     let quizData = [];
@@ -385,19 +1783,29 @@
     const resultScreen = document.getElementById('result-screen');
     const scoreEl = document.getElementById('score');
 
-    // FUNGSI UNTUK MENGACAK ARRAY (Fisher-Yates Shuffle)
+    // Fungsi baru untuk mengacak array menggunakan metode Fisher-Yates
     function shuffleArray(array) {
-        let shuffled = [...array];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
         }
-        return shuffled;
+        return array;
     }
 
     function initQuiz() {
-        // Mengacak urutan soal setiap kali kuis dimulai atau diulang
-        quizData = shuffleArray(originalQuestions); 
+        // Menerjemahkan otomatis Abjad kunci (A, B, C, D) ke indeks komputer (0, 1, 2, 3)
+        const letterToIndex = { 'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4 };
+        
+        // Memetakan array original ke array sementara dengan correctAnswer yang sudah diubah ke angka
+        let mappedQuestions = originalQuestions.map(q => ({
+            ...q,
+            correctAnswer: typeof q.correctAnswer === 'string' ? letterToIndex[q.correctAnswer.toUpperCase()] : q.correctAnswer
+        })); 
+
+        // Mengacak soal sebelum dimasukkan ke dalam quizData
+        quizData = shuffleArray(mappedQuestions);
         
         userAnswers = new Array(quizData.length).fill(null);
         checkedStatus = new Array(quizData.length).fill(false);
@@ -410,7 +1818,7 @@
     function loadQuestion() {
         const currentData = quizData[currentQuestionIndex];
         
-        // Menambahkan nomor urut di awal teks pertanyaan
+        // Menambahkan nomor urut di awal teks pertanyaan (nomor urut selalu dari 1, 2, dst)
         questionEl.innerText = `${currentQuestionIndex + 1}. ${currentData.question}`;
         
         progressEl.innerText = `Soal ${currentQuestionIndex + 1} dari ${quizData.length}`;
@@ -535,6 +1943,7 @@
 
     function retakeQuiz() {
         window.scrollTo({top: 0, behavior: 'smooth'});
+        // initQuiz akan memanggil ulang fungsi acak, sehingga urutan selalu baru
         initQuiz(); 
     }
 
